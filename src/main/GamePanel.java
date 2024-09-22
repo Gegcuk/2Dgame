@@ -8,8 +8,8 @@ import java.awt.*;
 
 public class GamePanel extends JPanel implements Runnable{
 
-    final int originalTileSize = 16;
-    final int scale = 3;
+    public final int originalTileSize = 16;
+    public final int scale = 3;
 
     public final int tileSize = originalTileSize * scale;
     public final int maxScreenCol = 16;
@@ -17,12 +17,18 @@ public class GamePanel extends JPanel implements Runnable{
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
 
+    public final int maxWorldCols = 50;
+    public final int maxWorldRows = 50;
+    public final int worldWidth = tileSize * maxWorldCols;
+    public final int worldHeight = tileSize * maxWorldRows;
+
     int FPS = 60;
 
     TileManager tileManager = new TileManager(this);
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
-    Player player = new Player(this, keyHandler);
+    public CollisionChecker collisionChecker = new CollisionChecker(this);
+    public Player player = new Player(this, keyHandler);
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -36,36 +42,6 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread = new Thread(this);
         gameThread.start();
     }
-
-//    @Override
-//    public void run() {
-//
-//        double drawInterval = (double) 1_000_000_000/FPS;
-//        double nextDrawTime = System.nanoTime() + drawInterval;
-//
-//        while(gameThread != null){
-//
-//            update();
-//
-//            repaint();
-//
-//            try {
-//                double remainingTime = nextDrawTime - System.nanoTime();
-//                remainingTime /= 1_000_000;
-//
-//                if(remainingTime < 0) {
-//                    remainingTime = 0;
-//                }
-//
-//                Thread.sleep((long) remainingTime);
-//
-//                nextDrawTime += drawInterval;
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//    }
-
 
     @Override
     public void run() {
