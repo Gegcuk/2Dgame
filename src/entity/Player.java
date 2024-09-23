@@ -111,12 +111,14 @@ public class Player extends Entity{
         }
         switch (objectName){
             case "Key":
+                gamePanel.playSE(1);
                 hasKey++;
                 gamePanel.objects[index] = null;
                 System.out.println("Keys: " + hasKey);
                 break;
             case "Door":
                 if(hasKey > 0){
+                    gamePanel.playSE(3);
                     gamePanel.objects[index] = null;
                     hasKey--;
                     System.out.println("Keys: " + hasKey);
@@ -124,6 +126,12 @@ public class Player extends Entity{
                 break;
             case "Chest":
                 System.out.println("Hurray!");
+                gamePanel.objects[index] = null;
+                break;
+            case "Boots":
+                gamePanel.playSE(2);
+                speed += 2;
+                gamePanel.objects[index] = null;
                 break;
         }
     }
