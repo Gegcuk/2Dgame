@@ -63,7 +63,7 @@ public class Player extends Entity{
         BufferedImage scaledImage = null;
 
         try{
-            scaledImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Walking sprites/"+ imageName +".png")));
+            scaledImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Walking sprites/" + imageName +".png")));
             scaledImage = utilityTool.scaleImage(scaledImage, gamePanel.tileSize, gamePanel.tileSize);
         } catch (IOException e){
             e.printStackTrace();

@@ -28,11 +28,11 @@ public class AssetSetter {
 
         gamePanel.objects[3] = new OBJ_Door(gamePanel);
         gamePanel.objects[3].worldX = 12 * gamePanel.tileSize;
-        gamePanel.objects[3].worldY = 22 * gamePanel.tileSize;
+        gamePanel.objects[3].worldY = 23 * gamePanel.tileSize;
 
         gamePanel.objects[4] = new OBJ_Door(gamePanel);
         gamePanel.objects[4].worldX = 10 * gamePanel.tileSize;
-        gamePanel.objects[4].worldY = 11 * gamePanel.tileSize;
+        gamePanel.objects[4].worldY = 12 * gamePanel.tileSize;
 
         gamePanel.objects[5] = new OBJ_Door(gamePanel);
         gamePanel.objects[5].worldX = 8 * gamePanel.tileSize;
@@ -40,7 +40,7 @@ public class AssetSetter {
 
         gamePanel.objects[6] = new OBJ_Chest(gamePanel);
         gamePanel.objects[6].worldX = 10 * gamePanel.tileSize;
-        gamePanel.objects[6].worldY = 7 * gamePanel.tileSize;
+        gamePanel.objects[6].worldY = 8 * gamePanel.tileSize;
 
         gamePanel.objects[7] = new OBJ_Boots(gamePanel);
         gamePanel.objects[7].worldX = 37 * gamePanel.tileSize;
