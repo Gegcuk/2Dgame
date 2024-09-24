@@ -22,7 +22,7 @@ public class UI {
         this.gamePanel = gamePanel;
         arial_40 = new Font("Colibri", Font.ITALIC, 30);
         arial_50B = new Font("Colibri", Font.BOLD, 50);
-        OBJ_Key key = new OBJ_Key();
+        OBJ_Key key = new OBJ_Key(gamePanel);
         keyImage = key.image;
     }
 
