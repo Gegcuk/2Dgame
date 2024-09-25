@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 
 public class Player extends Entity{
-    KeyHandler keyHandler;
+    public KeyHandler keyHandler;
 
     public final int screenX;
     public final int screenY;
@@ -80,11 +80,11 @@ public class Player extends Entity{
             interactNPC(npcIndex);
 
             if(collisionOn == false){
-                switch (direction){
-                    case Direction.UP: worldY -= speed; break;
-                    case Direction.DOWN: worldY += speed; break;
-                    case Direction.LEFT: worldX -= speed; break;
-                    case Direction.RIGHT: worldX += speed; break;
+                switch (direction) {
+                    case Direction.UP -> worldY -= speed;
+                    case Direction.DOWN -> worldY += speed;
+                    case Direction.LEFT -> worldX -= speed;
+                    case Direction.RIGHT -> worldX += speed;
                 }
             }
 
@@ -110,31 +110,35 @@ public class Player extends Entity{
 
     private void interactNPC(int npcIndex) {
         if(npcIndex != 999){
-            System.out.println("You are hitting an npc!");
+            if(gamePanel.keyHandler.enterPressed){
+                gamePanel.gameState = gamePanel.dialogState;
+                gamePanel.npc[npcIndex].speak();
+            }
         }
+        gamePanel.keyHandler.enterPressed = false;
     }
 
     public void draw(Graphics2D graphics2D){
 
         BufferedImage image = null;
 
-        switch (direction){
-            case UP:
-                if(spriteNum == 1) image = up1;
-                if(spriteNum == 2) image = up2;
-                break;
-            case DOWN:
-                if(spriteNum == 1) image = down1;
-                if(spriteNum == 2) image = down2;
-                break;
-            case LEFT:
-                if(spriteNum == 1) image = left1;
-                if(spriteNum == 2) image = left2;
-                break;
-            case RIGHT:
-                if(spriteNum == 1) image = right1;
-                if(spriteNum == 2) image = right2;
-                break;
+        switch (direction) {
+            case UP -> {
+                if (spriteNum == 1) image = up1;
+                if (spriteNum == 2) image = up2;
+            }
+            case DOWN -> {
+                if (spriteNum == 1) image = down1;
+                if (spriteNum == 2) image = down2;
+            }
+            case LEFT -> {
+                if (spriteNum == 1) image = left1;
+                if (spriteNum == 2) image = left2;
+            }
+            case RIGHT -> {
+                if (spriteNum == 1) image = right1;
+                if (spriteNum == 2) image = right2;
+            }
         }
         graphics2D.drawImage(image, screenX, screenY,null);
 

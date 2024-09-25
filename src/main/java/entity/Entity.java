@@ -10,6 +10,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
+import static util.Direction.*;
+import static util.Direction.LEFT;
+
 public class Entity {
 
     public GamePanel gamePanel;
@@ -26,6 +29,8 @@ public class Entity {
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
     public int actionLockCounter;
+    String[] dialogue = new String[20];
+    public int dialogueIndex = 0;
 
     public Entity(GamePanel gamePanel){
         this.gamePanel = gamePanel;
@@ -33,6 +38,21 @@ public class Entity {
 
 
     public void setAction(){}
+    public void speak(){
+        if(dialogue[dialogueIndex] == null){
+            dialogueIndex = 0;
+        }
+        gamePanel.ui.currentDialogue = dialogue[dialogueIndex];
+        dialogueIndex++;
+
+        switch (gamePanel.player.direction){
+            case UP -> direction=DOWN;
+            case DOWN -> direction=UP;
+            case LEFT -> direction=RIGHT;
+            case RIGHT -> direction=LEFT;
+        }
+    }
+
     public void update(){
         setAction();
 
@@ -73,23 +93,23 @@ public class Entity {
                 worldY + gamePanel.tileSize > gamePanel.player.worldY - gamePanel.player.screenY &&
                 worldY - gamePanel.tileSize < gamePanel.player.worldY + gamePanel.player.screenY){
 
-            switch (direction){
-                case UP:
-                    if(spriteNum == 1) image = up1;
-                    if(spriteNum == 2) image = up2;
-                    break;
-                case DOWN:
-                    if(spriteNum == 1) image = down1;
-                    if(spriteNum == 2) image = down2;
-                    break;
-                case LEFT:
-                    if(spriteNum == 1) image = left1;
-                    if(spriteNum == 2) image = left2;
-                    break;
-                case RIGHT:
-                    if(spriteNum == 1) image = right1;
-                    if(spriteNum == 2) image = right2;
-                    break;
+            switch (direction) {
+                case UP -> {
+                    if (spriteNum == 1) image = up1;
+                    if (spriteNum == 2) image = up2;
+                }
+                case DOWN -> {
+                    if (spriteNum == 1) image = down1;
+                    if (spriteNum == 2) image = down2;
+                }
+                case LEFT -> {
+                    if (spriteNum == 1) image = left1;
+                    if (spriteNum == 2) image = left2;
+                }
+                case RIGHT -> {
+                    if (spriteNum == 1) image = right1;
+                    if (spriteNum == 2) image = right2;
+                }
             }
 
             graphics2D.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);

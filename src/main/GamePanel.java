@@ -45,16 +45,16 @@ public class GamePanel extends JPanel implements Runnable {
     int FPS = 60;
 
     /** Manages the game's tile rendering. */
-    TileManager tileManager = new TileManager(this);
+    public TileManager tileManager = new TileManager(this);
 
     /** Handles key input from the player. */
-    KeyHandler keyHandler = new KeyHandler(this);
+    public KeyHandler keyHandler = new KeyHandler(this);
 
     /** Handles sound effects. */
-    Sound soundEffect = new Sound();
+    public Sound soundEffect = new Sound();
 
     /** Handles background music. */
-    Sound backgroundMusic = new Sound();
+    public Sound backgroundMusic = new Sound();
 
     /** Checks for collisions in the game. */
     public CollisionChecker collisionChecker = new CollisionChecker(this);
@@ -85,6 +85,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     /** Game state indicating that the game is paused. */
     public final int pauseState = 2;
+
+    public final int dialogState = 3;
 
     /**
      * Constructor for the GamePanel class. Sets up the initial game panel size, background color,
