@@ -29,8 +29,6 @@ public class SuperObject {
 
             graphics2D.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
         }
-
-
     }
 
 }

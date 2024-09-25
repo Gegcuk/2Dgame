@@ -2,26 +2,19 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
-import main.UtilityTool;
-
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.Objects;
+
 
 public class Player extends Entity{
-    GamePanel gamePanel;
     KeyHandler keyHandler;
 
     public final int screenX;
     public final int screenY;
-    public int hasKey = 0;
+    int standCounter = 0;
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler){
-        this.gamePanel = gamePanel;
+        super(gamePanel);
         this.keyHandler = keyHandler;
 
         screenX = gamePanel.screenWidth/2 - (gamePanel.tileSize/2);
@@ -48,27 +41,14 @@ public class Player extends Entity{
     }
 
     public void getPlayerImage(){
-        up1 = setup("boy_up_1");
-        up2 = setup("boy_up_2");
-        down1 = setup("boy_down_1");
-        down2 = setup("boy_down_2");
-        left1 = setup("boy_left_1");
-        left2 = setup("boy_left_2");
-        right1 = setup("boy_right_1");
-        right2 = setup("boy_right_2");
-    }
-
-    public BufferedImage setup(String imageName){
-        UtilityTool utilityTool = new UtilityTool();
-        BufferedImage scaledImage = null;
-
-        try{
-            scaledImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Walking sprites/" + imageName +".png")));
-            scaledImage = utilityTool.scaleImage(scaledImage, gamePanel.tileSize, gamePanel.tileSize);
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-        return scaledImage;
+        up1 = setup("/player/Walking sprites/boy_up_1");
+        up2 = setup("/player/Walking sprites/boy_up_2");
+        down1 = setup("/player/Walking sprites/boy_down_1");
+        down2 = setup("/player/Walking sprites/boy_down_2");
+        left1 = setup("/player/Walking sprites/boy_left_1");
+        left2 = setup("/player/Walking sprites/boy_left_2");
+        right1 = setup("/player/Walking sprites/boy_right_1");
+        right2 = setup("/player/Walking sprites/boy_right_2");
     }
 
     public void update(){
@@ -119,36 +99,7 @@ public class Player extends Entity{
     public void pickUpObject(int index){
         String objectName = "empty";
         if(index != 999){
-            objectName = gamePanel.objects[index].name;
-        }
-        switch (objectName){
-            case "Key":
-                gamePanel.playSE(1);
-                hasKey++;
-                gamePanel.objects[index] = null;
-                gamePanel.ui.showMessage("You got a key!");
-                break;
-            case "Door":
-                if(hasKey > 0){
-                    gamePanel.playSE(3);
-                    gamePanel.objects[index] = null;
-                    hasKey--;
-                    gamePanel.ui.showMessage("Door is open!");
-                } else {
-                    gamePanel.ui.showMessage("You need a key!");
-                }
-                break;
-            case "Boots":
-                gamePanel.playSE(2);
-                speed += 2;
-                gamePanel.objects[index] = null;
-                gamePanel.ui.showMessage("Speed up!");
-                break;
-            case "Chest":
-                gamePanel.ui.gameFinished = true;
-                gamePanel.stopMusic();
-                gamePanel.playSE(4);
-                break;
+
         }
     }
 

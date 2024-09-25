@@ -1,5 +1,6 @@
 package main;
 
+import entity.NPC_OldMan;
 import object.OBJ_Boots;
 import object.OBJ_Chest;
 import object.OBJ_Door;
@@ -14,37 +15,13 @@ public class AssetSetter {
     }
 
     public void setObject(){
-        gamePanel.objects[0] = new OBJ_Key(gamePanel);
-        gamePanel.objects[0].worldX = 23 * gamePanel.tileSize;
-        gamePanel.objects[0].worldY = 7 * gamePanel.tileSize;
 
-        gamePanel.objects[1] = new OBJ_Key(gamePanel);
-        gamePanel.objects[1].worldX = 23 * gamePanel.tileSize;
-        gamePanel.objects[1].worldY = 40 * gamePanel.tileSize;
+    }
 
-        gamePanel.objects[2] = new OBJ_Key(gamePanel);
-        gamePanel.objects[2].worldX = 38 * gamePanel.tileSize;
-        gamePanel.objects[2].worldY = 9 * gamePanel.tileSize;
-
-        gamePanel.objects[3] = new OBJ_Door(gamePanel);
-        gamePanel.objects[3].worldX = 12 * gamePanel.tileSize;
-        gamePanel.objects[3].worldY = 23 * gamePanel.tileSize;
-
-        gamePanel.objects[4] = new OBJ_Door(gamePanel);
-        gamePanel.objects[4].worldX = 10 * gamePanel.tileSize;
-        gamePanel.objects[4].worldY = 12 * gamePanel.tileSize;
-
-        gamePanel.objects[5] = new OBJ_Door(gamePanel);
-        gamePanel.objects[5].worldX = 8 * gamePanel.tileSize;
-        gamePanel.objects[5].worldY = 28 * gamePanel.tileSize;
-
-        gamePanel.objects[6] = new OBJ_Chest(gamePanel);
-        gamePanel.objects[6].worldX = 10 * gamePanel.tileSize;
-        gamePanel.objects[6].worldY = 8 * gamePanel.tileSize;
-
-        gamePanel.objects[7] = new OBJ_Boots(gamePanel);
-        gamePanel.objects[7].worldX = 37 * gamePanel.tileSize;
-        gamePanel.objects[7].worldY = 42 * gamePanel.tileSize;
+    public void setNPC(){
+        gamePanel.npc[0] = new NPC_OldMan(gamePanel);
+        gamePanel.npc[0].worldX = gamePanel.tileSize * 21;
+        gamePanel.npc[0].worldY = gamePanel.tileSize * 21;
     }
 
 
