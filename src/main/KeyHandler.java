@@ -21,6 +21,28 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
 
+
+        //Title state
+        if(gamePanel.gameState == gamePanel.titleState){
+            if(code == KeyEvent.VK_UP)
+                if (gamePanel.ui.commandNumber > 0) gamePanel.ui.commandNumber--;
+            if(code == KeyEvent.VK_DOWN) {
+                if (gamePanel.ui.commandNumber < 2) gamePanel.ui.commandNumber++;
+                System.out.println(gamePanel.ui.commandNumber);
+            }
+            if(code == KeyEvent.VK_ENTER){
+                if(gamePanel.ui.commandNumber == 0){
+                    gamePanel.gameState = gamePanel.playState;
+                }
+                if(gamePanel.ui.commandNumber == 1) {
+
+                }
+                if(gamePanel.ui.commandNumber == 2) {
+                    System.exit(0);
+                }
+            }
+        }
+
         if(gamePanel.gameState == gamePanel.playState){
             if(code == KeyEvent.VK_DOWN){
                 downPressed = true;

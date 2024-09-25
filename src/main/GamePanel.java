@@ -80,6 +80,8 @@ public class GamePanel extends JPanel implements Runnable {
     /** The current state of the game. */
     public int gameState;
 
+    public final int titleState = 0;
+
     /** Game state indicating that the game is in play. */
     public final int playState = 1;
 
@@ -107,7 +109,7 @@ public class GamePanel extends JPanel implements Runnable {
         assetSetter.setObject();
         assetSetter.setNPC();
         playMusic(0);
-        gameState = playState;
+        gameState = titleState;
     }
 
     /**
@@ -174,30 +176,34 @@ public class GamePanel extends JPanel implements Runnable {
         long drawStartTime = 0;
         long drawEndTime = 0;
 
-        if (keyHandler.isTestMode) {
-            drawStartTime = System.nanoTime();
+        if (keyHandler.isTestMode) drawStartTime = System.nanoTime();
+
+        if(gameState == titleState){
+            ui.draw(graphics2D);
+        } else {
+            tileManager.draw(graphics2D);
+            for (SuperObject object : objects) {
+                if (object != null) {
+                    object.draw(graphics2D, this);
+                }
+            }
+
+            //NPC
+            for (Entity entity : npc) {
+                if (entity != null) {
+                    entity.draw(graphics2D);
+                }
+            }
+
+            //Player
+            player.draw(graphics2D);
+
+            //UI
+            ui.draw(graphics2D);
         }
 
         // Drawing tiles, objects, player, and UI
-        tileManager.draw(graphics2D);
-        for (SuperObject object : objects) {
-            if (object != null) {
-                object.draw(graphics2D, this);
-            }
-        }
 
-        //NPC
-        for (Entity entity : npc) {
-            if (entity != null) {
-                entity.draw(graphics2D);
-            }
-        }
-
-        //Player
-        player.draw(graphics2D);
-
-        //UI
-        ui.draw(graphics2D);
 
         // Display debug information
         if (keyHandler.isTestMode) {
