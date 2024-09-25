@@ -2,6 +2,8 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import util.Direction;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -37,7 +39,7 @@ public class Player extends Entity{
         worldX = gamePanel.tileSize * 23;
         worldY = gamePanel.tileSize * 21;
         speed = 4;
-        direction = "down";
+        direction = Direction.DOWN;
     }
 
     public void getPlayerImage(){
@@ -56,31 +58,33 @@ public class Player extends Entity{
         if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed){
 
             if(keyHandler.upPressed){
-                direction = "up";
+                direction = Direction.UP;
             }
             else if(keyHandler.downPressed){
-                direction = "down";
+                direction = Direction.DOWN;
             }
             else if(keyHandler.leftPressed){
-                direction = "left";
+                direction = Direction.LEFT;
             }
             else if(keyHandler.rightPressed){
-                direction = "right";
+                direction = Direction.RIGHT;
             }
 
-            collision = false;
+            collisionOn = false;
             gamePanel.collisionChecker.checkTile(this);
 
             int objectIndex = gamePanel.collisionChecker.checkObject(this, true);
             pickUpObject(objectIndex);
 
+            int npcIndex = gamePanel.collisionChecker.checkEntity(this, gamePanel.npc);
+            interactNPC(npcIndex);
 
-            if(collision == false){
+            if(collisionOn == false){
                 switch (direction){
-                    case "up": worldY -= speed; break;
-                    case "down": worldY += speed; break;
-                    case "left": worldX -= speed; break;
-                    case "right": worldX += speed; break;
+                    case Direction.UP: worldY -= speed; break;
+                    case Direction.DOWN: worldY += speed; break;
+                    case Direction.LEFT: worldX -= speed; break;
+                    case Direction.RIGHT: worldX += speed; break;
                 }
             }
 
@@ -96,10 +100,17 @@ public class Player extends Entity{
         }
     }
 
+
     public void pickUpObject(int index){
         String objectName = "empty";
         if(index != 999){
 
+        }
+    }
+
+    private void interactNPC(int npcIndex) {
+        if(npcIndex != 999){
+            System.out.println("You are hitting an npc!");
         }
     }
 
@@ -108,23 +119,29 @@ public class Player extends Entity{
         BufferedImage image = null;
 
         switch (direction){
-            case "up":
+            case UP:
                 if(spriteNum == 1) image = up1;
                 if(spriteNum == 2) image = up2;
                 break;
-            case "down":
+            case DOWN:
                 if(spriteNum == 1) image = down1;
                 if(spriteNum == 2) image = down2;
                 break;
-            case "left":
+            case LEFT:
                 if(spriteNum == 1) image = left1;
                 if(spriteNum == 2) image = left2;
                 break;
-            case "right":
+            case RIGHT:
                 if(spriteNum == 1) image = right1;
                 if(spriteNum == 2) image = right2;
                 break;
         }
         graphics2D.drawImage(image, screenX, screenY,null);
+
+        //DEBUGGING
+        if(keyHandler.isTestMode){
+            graphics2D.setColor(Color.RED);
+            graphics2D.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+        }
     }
 }

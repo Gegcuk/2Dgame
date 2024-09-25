@@ -2,6 +2,7 @@ package entity;
 
 import main.GamePanel;
 import main.UtilityTool;
+import util.Direction;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -16,17 +17,48 @@ public class Entity {
     public int speed;
 
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    public String direction;
+    public Direction direction;
 
     public int spriteCounter = 0;
     public int spriteNum = 1;
 
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
     public int solidAreaDefaultX, solidAreaDefaultY;
-    public boolean collision = false;
+    public boolean collisionOn = false;
+    public int actionLockCounter;
 
     public Entity(GamePanel gamePanel){
         this.gamePanel = gamePanel;
+    }
+
+
+    public void setAction(){}
+    public void update(){
+        setAction();
+
+        collisionOn = false;
+        gamePanel.collisionChecker.checkTile(this);
+        gamePanel.collisionChecker.checkObject(this, false);
+        gamePanel.collisionChecker.checkPlayer(this);
+
+        if(collisionOn == false){
+            switch (direction){
+                case Direction.UP: worldY -= speed; break;
+                case Direction.DOWN: worldY += speed; break;
+                case Direction.LEFT: worldX -= speed; break;
+                case Direction.RIGHT: worldX += speed; break;
+            }
+        }
+
+        spriteCounter++;
+        if(spriteCounter > 10){
+            if(spriteNum == 1) {
+                spriteNum = 2;
+            } else if(spriteNum == 2){
+                spriteNum = 1;
+            }
+            spriteCounter = 0;
+        }
     }
 
     public void draw(Graphics2D graphics2D) {
@@ -42,25 +74,26 @@ public class Entity {
                 worldY - gamePanel.tileSize < gamePanel.player.worldY + gamePanel.player.screenY){
 
             switch (direction){
-                case "up":
+                case UP:
                     if(spriteNum == 1) image = up1;
                     if(spriteNum == 2) image = up2;
                     break;
-                case "down":
+                case DOWN:
                     if(spriteNum == 1) image = down1;
                     if(spriteNum == 2) image = down2;
                     break;
-                case "left":
+                case LEFT:
                     if(spriteNum == 1) image = left1;
                     if(spriteNum == 2) image = left2;
                     break;
-                case "right":
+                case RIGHT:
                     if(spriteNum == 1) image = right1;
                     if(spriteNum == 2) image = right2;
                     break;
             }
 
             graphics2D.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+
         }
     }
 
@@ -76,6 +109,7 @@ public class Entity {
         }
         return scaledImage;
     }
+
 
 
 }
