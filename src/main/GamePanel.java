@@ -2,11 +2,12 @@ package main;
 
 import entity.Entity;
 import entity.Player;
-import object.SuperObject;
+import object.GameObject;
 import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 /**
  * The GamePanel class manages the core game functionalities, including rendering, updates, and game states.
@@ -72,7 +73,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Player player = new Player(this, keyHandler);
 
     /** Array of objects present in the game world. */
-    public SuperObject[] objects = new SuperObject[10];
+    public GameObject[] objects = new GameObject[10];
 
     /** Array of NPCs (non-player characters) in the game. */
     public Entity[] npc = new Entity[10];
@@ -90,6 +91,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     public final int dialogState = 3;
 
+    public ObjectManager objectManager;
+
     /**
      * Constructor for the GamePanel class. Sets up the initial game panel size, background color,
      * and key listener.
@@ -100,6 +103,8 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyHandler);
         this.setFocusable(true);
+        this.objectManager = new ObjectManager(this);
+        objectManager.loadObjects();
     }
 
     /**
@@ -182,7 +187,9 @@ public class GamePanel extends JPanel implements Runnable {
             ui.draw(graphics2D);
         } else {
             tileManager.draw(graphics2D);
-            for (SuperObject object : objects) {
+
+            List<GameObject> gameObjects = objectManager.getGameObjects();
+            for (GameObject object : gameObjects) {
                 if (object != null) {
                     object.draw(graphics2D, this);
                 }
