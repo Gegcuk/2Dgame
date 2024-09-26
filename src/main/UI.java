@@ -1,6 +1,10 @@
 package main;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
 
 /**
  * The UI class is responsible for rendering the user interface in the game,
@@ -11,6 +15,7 @@ public class UI {
     Graphics2D graphics2D;
     GamePanel gamePanel;
     Font pixelify_40, pixelify_50B, pixelify_32P;
+    BufferedImage heart_full, heart_half, heart_empty;
     public boolean messageOn = false; // Flag to display messages on the screen
     public String message = ""; // The message to display
     public String currentDialogue = ""; // Current dialogue text to display
@@ -28,6 +33,15 @@ public class UI {
         pixelify_40 = new Font("Pixelify Sans", Font.ITALIC, 20);
         pixelify_50B = new Font("Pixelify Sans", Font.BOLD, 50);
         pixelify_32P = new Font("Pixelify Sans", Font.PLAIN, 32);
+
+        try {
+            heart_full = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/objects/heart_full.png")));
+            heart_half = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/objects/heart_half.png")));
+            heart_empty = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/objects/heart_blank.png")));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     /**
@@ -55,14 +69,44 @@ public class UI {
             drawTitleScreen();
         }
 
+        if(gamePanel.gameState == gamePanel.playState){
+            drawPlayerLife();
+        }
+
         // Draw pause screen if the game is in pause state
         if(gamePanel.gameState == gamePanel.pauseState){
+            drawPlayerLife();
             drawPauseScreen();
         }
 
         // Draw dialogue screen if the game is in dialogue state
         if(gamePanel.gameState == gamePanel.dialogState){
+            drawPlayerLife();
             drawDialogueScreen();
+        }
+    }
+
+    private void drawPlayerLife() {
+        int x = gamePanel.tileSize/2;
+        int y = gamePanel.tileSize/2;
+        int heartSize = gamePanel.tileSize;
+
+        int maxHearts = gamePanel.player.maxLife/2;
+        int currentLife = gamePanel.player.life;
+
+        for(int i = 0; i < maxHearts; i++){
+            BufferedImage heartImage;
+
+            if(currentLife >= (i + 1) * 2){
+                heartImage = heart_full;
+            } else if (currentLife == (i * 2) + 1){
+                heartImage = heart_half;
+            } else {
+                heartImage = heart_empty;
+            }
+
+            graphics2D.drawImage(heartImage, x, y, heartSize, heartSize, null);
+            x += heartSize + 10;
         }
     }
 

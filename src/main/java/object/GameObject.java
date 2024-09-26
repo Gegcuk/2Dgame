@@ -13,15 +13,6 @@ import java.util.Map;
 import java.util.Objects;
 
 public class GameObject {
-//
-//    public BufferedImage image;
-//    public String name;
-//    public boolean collisionOn = false;
-//    public int worldX, worldY;
-//    public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
-//    public int solidAreaDefaultX = 0;
-//    public int solidAreaDefaultY = 0;
-//    UtilityTool utilityTool = new UtilityTool();
 
     public Map<String, BufferedImage> stateImages;
     public String currentState;

@@ -32,6 +32,9 @@ public class Entity {
     String[] dialogue = new String[20];
     public int dialogueIndex = 0;
 
+    public int maxLife;
+    public int life;
+
     public Entity(GamePanel gamePanel){
         this.gamePanel = gamePanel;
     }

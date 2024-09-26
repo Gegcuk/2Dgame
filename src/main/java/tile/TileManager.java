@@ -118,9 +118,6 @@ public class TileManager {
 
                 graphics2D.drawImage(tiles[tileNum].image, screenX, screenY, null);
 
-                //DEBUGGING
-                graphics2D.setColor(Color.RED);
-                graphics2D.drawRect(screenX, screenY, gamePanel.tileSize, gamePanel.tileSize);
             }
             worldCol++;
             if(worldCol == gamePanel.maxWorldCols){
