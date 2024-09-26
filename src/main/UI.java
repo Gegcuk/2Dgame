@@ -15,6 +15,7 @@ public class UI {
     public String message = ""; // The message to display
     public String currentDialogue = ""; // Current dialogue text to display
     public int commandNumber = 0;
+    public int titleScreenState = 0;
 
     /**
      * Constructor that initializes the UI with the given GamePanel and fonts.
@@ -69,64 +70,108 @@ public class UI {
      * Draws the title screen with the game title and acknowledgment.
      */
     private void drawTitleScreen() {
-        // Set background color
-        graphics2D.setColor(new Color(37, 107, 125));
-        graphics2D.fillRect(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
+        if(titleScreenState == 0){
+            // Set background color
+            graphics2D.setColor(new Color(37, 107, 125));
+            graphics2D.fillRect(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
 
-        // Draw game title
-        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 50F));
-        String text = "Blue Knight Adventure";
-        String acknowledgment = "Inspired by RyiSnow";
+            // Draw game title
+            graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 50F));
+            String text = "Blue Knight Adventure";
+            String acknowledgment = "Inspired by RyiSnow";
 
-        int x = getCenterOfTextX(text);
-        int y = gamePanel.tileSize * 2;
+            int x = getCenterOfTextX(text);
+            int y = gamePanel.tileSize * 2;
 
-        // Draw shadow effect
-        graphics2D.setColor(Color.BLACK);
-        graphics2D.drawString(text, x + 3, y + 3);
-        graphics2D.setColor(Color.white);
-        graphics2D.drawString(text, x, y);
+            // Draw shadow effect
+            graphics2D.setColor(Color.BLACK);
+            graphics2D.drawString(text, x + 3, y + 3);
+            graphics2D.setColor(Color.white);
+            graphics2D.drawString(text, x, y);
 
-        //Draw blue knight image
-        x = gamePanel.screenWidth/2 - gamePanel.tileSize;
-        y += gamePanel.tileSize * 2;
-        graphics2D.drawImage(gamePanel.player.down1, x, y, gamePanel.tileSize*2, gamePanel.tileSize*2, null);
+            //Draw blue knight image
+            x = gamePanel.screenWidth/2 - gamePanel.tileSize;
+            y += gamePanel.tileSize * 2;
+            graphics2D.drawImage(gamePanel.player.down1, x, y, gamePanel.tileSize*2, gamePanel.tileSize*2, null);
 
-        //Draw menu
-        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD));
-        text = "NEW GAME";
-        x = getCenterOfTextX(text);
-        y += gamePanel.tileSize * 3;
-        graphics2D.drawString(text, x, y);
-        if(commandNumber == 0) {
-            graphics2D.drawString(">", x - gamePanel.tileSize, y);
+            //Draw menu
+            graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD));
+            text = "NEW GAME";
+            x = getCenterOfTextX(text);
+            y += gamePanel.tileSize * 3;
+            graphics2D.drawString(text, x, y);
+            if(commandNumber == 0) {
+                graphics2D.drawString(">", x - gamePanel.tileSize, y);
+            }
+
+            text = "LOAD GAME";
+            x = getCenterOfTextX(text);
+            y += gamePanel.tileSize;
+            graphics2D.drawString(text, x, y);
+            if(commandNumber == 1) {
+                graphics2D.drawString(">", x - gamePanel.tileSize, y);
+            }
+
+            text = "QUIT GAME";
+            x = getCenterOfTextX(text);
+            y += gamePanel.tileSize;
+            graphics2D.drawString(text, x, y);
+            if(commandNumber == 2) {
+                graphics2D.drawString(">", x - gamePanel.tileSize, y);
+            }
+
+
+            // Draw acknowledgment
+            graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 30F));
+            x = getCenterOfTextX(acknowledgment);
+            y += gamePanel.tileSize * 2;
+            graphics2D.setColor(Color.BLACK);
+            graphics2D.drawString(acknowledgment, x + 3, y + 3);
+            graphics2D.setColor(Color.white);
+            graphics2D.drawString(acknowledgment, x, y);
         }
+        else if (titleScreenState == 1){
+            graphics2D.setColor(Color.white);
+            graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 30F));
 
-        text = "LOAD GAME";
-        x = getCenterOfTextX(text);
-        y += gamePanel.tileSize;
-        graphics2D.drawString(text, x, y);
-        if(commandNumber == 1) {
-            graphics2D.drawString(">", x - gamePanel.tileSize, y);
+            String text = "Select your class";
+            int x = getCenterOfTextX(text);
+            int y = gamePanel.tileSize * 2;
+            graphics2D.drawString(text, x, y);
+
+            text = "Viking";
+            x = getCenterOfTextX(text);
+            y += gamePanel.tileSize * 2;
+            graphics2D.drawString(text, x, y);
+            if(commandNumber == 0) {
+                graphics2D.drawString(">", x - gamePanel.tileSize, y);
+            }
+
+            text = "Mage";
+            x = getCenterOfTextX(text);
+            y += gamePanel.tileSize;
+            graphics2D.drawString(text, x, y);
+            if(commandNumber == 1) {
+                graphics2D.drawString(">", x - gamePanel.tileSize, y);
+            }
+
+            text = "Archer";
+            x = getCenterOfTextX(text);
+            y += gamePanel.tileSize;
+            graphics2D.drawString(text, x, y);
+            if(commandNumber == 2) {
+                graphics2D.drawString(">", x - gamePanel.tileSize, y);
+            }
+
+            text = "Back";
+            x = getCenterOfTextX(text);
+            y += gamePanel.tileSize * 3;
+            graphics2D.drawString(text, x, y);
+            if(commandNumber == 3) {
+                graphics2D.drawString(">", x - gamePanel.tileSize, y);
+            }
+
         }
-
-        text = "QUIT GAME";
-        x = getCenterOfTextX(text);
-        y += gamePanel.tileSize;
-        graphics2D.drawString(text, x, y);
-        if(commandNumber == 2) {
-            graphics2D.drawString(">", x - gamePanel.tileSize, y);
-        }
-
-
-        // Draw acknowledgment
-        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 30F));
-        x = getCenterOfTextX(acknowledgment);
-        y += gamePanel.tileSize * 2;
-        graphics2D.setColor(Color.BLACK);
-        graphics2D.drawString(acknowledgment, x + 3, y + 3);
-        graphics2D.setColor(Color.white);
-        graphics2D.drawString(acknowledgment, x, y);
     }
 
     /**

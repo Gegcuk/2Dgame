@@ -24,21 +24,48 @@ public class KeyHandler implements KeyListener {
 
         //Title state
         if(gamePanel.gameState == gamePanel.titleState){
-            if(code == KeyEvent.VK_UP)
-                if (gamePanel.ui.commandNumber > 0) gamePanel.ui.commandNumber--;
-            if(code == KeyEvent.VK_DOWN) {
-                if (gamePanel.ui.commandNumber < 2) gamePanel.ui.commandNumber++;
-                System.out.println(gamePanel.ui.commandNumber);
-            }
-            if(code == KeyEvent.VK_ENTER){
-                if(gamePanel.ui.commandNumber == 0){
-                    gamePanel.gameState = gamePanel.playState;
-                }
-                if(gamePanel.ui.commandNumber == 1) {
 
+            if(gamePanel.ui.titleScreenState == 0){
+                if(code == KeyEvent.VK_UP)
+                    if (gamePanel.ui.commandNumber > 0) gamePanel.ui.commandNumber--;
+                if(code == KeyEvent.VK_DOWN) {
+                    if (gamePanel.ui.commandNumber < 2) gamePanel.ui.commandNumber++;
+                    System.out.println(gamePanel.ui.commandNumber);
                 }
-                if(gamePanel.ui.commandNumber == 2) {
-                    System.exit(0);
+                if(code == KeyEvent.VK_ENTER){
+                    if(gamePanel.ui.commandNumber == 0){
+                        gamePanel.ui.titleScreenState = 1;
+                    }
+                    if(gamePanel.ui.commandNumber == 1) {
+
+                    }
+                    if(gamePanel.ui.commandNumber == 2) {
+                        System.exit(0);
+                    }
+                }
+            } else if(gamePanel.ui.titleScreenState == 1){
+                if(code == KeyEvent.VK_UP)
+                    if (gamePanel.ui.commandNumber > 0) gamePanel.ui.commandNumber--;
+                if(code == KeyEvent.VK_DOWN) {
+                    if (gamePanel.ui.commandNumber < 3) gamePanel.ui.commandNumber++;
+                }
+                if(code == KeyEvent.VK_ENTER){
+                    if(gamePanel.ui.commandNumber == 0){
+                        System.out.println("You chose Viking!");
+                        gamePanel.gameState = gamePanel.playState;
+                    }
+                    if(gamePanel.ui.commandNumber == 1) {
+                        System.out.println("You chose Mage!");
+                        gamePanel.gameState = gamePanel.playState;
+                    }
+                    if(gamePanel.ui.commandNumber == 2) {
+                        System.out.println("You chose Archer!");
+                        gamePanel.gameState = gamePanel.playState;
+                    }
+                    if(gamePanel.ui.commandNumber == 3) {
+                        gamePanel.ui.commandNumber = 0;
+                        gamePanel.ui.titleScreenState = 0;
+                    }
                 }
             }
         }
