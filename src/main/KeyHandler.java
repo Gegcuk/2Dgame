@@ -6,7 +6,8 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
 
     GamePanel gamePanel;
-    public boolean upPressed, downPressed, leftPressed ,rightPressed, enterPressed;
+    public boolean upPressed, downPressed, leftPressed ,rightPressed;
+    public boolean enterPressed;
     public boolean isTestMode = false;
 
     public KeyHandler(GamePanel gamePanel){
@@ -87,11 +88,11 @@ public class KeyHandler implements KeyListener {
                 gamePanel.gameState = gamePanel.pauseState;
             }
             if(code == KeyEvent.VK_ENTER){
+                System.out.println(gamePanel.player.direction);
                 enterPressed = true;
             }
             if(code == KeyEvent.VK_T){
-                if(!isTestMode) isTestMode = true;
-                else if (isTestMode) isTestMode = false;
+                isTestMode = !isTestMode;
             }
         }
         if(gamePanel.gameState == gamePanel.pauseState){
@@ -110,6 +111,9 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
+        if(code == KeyEvent.VK_ENTER){
+            enterPressed = false;
+        }
         if(code == KeyEvent.VK_DOWN){
             downPressed = false;
         }

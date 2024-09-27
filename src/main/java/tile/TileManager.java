@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Objects;
 
 public class TileManager {
 
@@ -41,7 +40,8 @@ public class TileManager {
             if(inputStream == null){
                 throw new IOException("Tile configuration file not found: " + TILE_CONFIG_FILE);
             }
-            List<TileConfig> tileConfigs = objectMapper.readValue(inputStream, new TypeReference<List<TileConfig>>(){});
+            List<TileConfig> tileConfigs = objectMapper.readValue(inputStream, new TypeReference<>() {
+            });
             for(TileConfig config : tileConfigs){
                 setupTile(config);
             }
@@ -68,30 +68,29 @@ public class TileManager {
 
 
     public void loadMap(String filePath){
-        try(InputStream inputStream = getClass().getResourceAsStream(filePath);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))
-        ){
-            if(inputStream == null){
-                throw new IOException("Map file not found: " + filePath);
-            }
+        try(InputStream inputStream = getClass().getResourceAsStream(filePath)
+        ) {
+            assert inputStream != null;
+            try(BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))
+            ){
+                int col;
+                int row = 0;
 
-            int col = 0;
-            int row = 0;
+                while (row < gamePanel.maxWorldRows){
+                    String line = reader.readLine();
+                    if(line == null){
+                        break;
+                    }
+                    String[] numbers = line.split(" ");
 
-            while (row < gamePanel.maxWorldRows){
-                String line = reader.readLine();
-                if(line == null){
-                    break;
+                    for(col = 0; col < gamePanel.maxWorldCols; col++) {
+                        int num = Integer.parseInt(numbers[col]);
+                        mapTileNum[col][row] = num;
+                    }
+                    row++;
                 }
-                String[] numbers = line.split(" ");
 
-                for(col = 0; col < gamePanel.maxWorldCols; col++) {
-                    int num = Integer.parseInt(numbers[col]);
-                    mapTileNum[col][row] = num;
-                }
-                row++;
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }

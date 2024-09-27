@@ -66,6 +66,8 @@ public class GamePanel extends JPanel implements Runnable {
     /** Manages the user interface (UI) elements. */
     public UI ui = new UI(this);
 
+    public EventHandler eventHandler = new EventHandler(this);
+
     /** The thread that runs the main game loop. */
     Thread gameThread;
 
@@ -177,12 +179,6 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(graphics);
         Graphics2D graphics2D = (Graphics2D) graphics;
 
-        // DEBUG MODE
-        long drawStartTime = 0;
-        long drawEndTime = 0;
-
-        if (keyHandler.isTestMode) drawStartTime = System.nanoTime();
-
         if(gameState == titleState){
             ui.draw(graphics2D);
         } else {
@@ -205,20 +201,18 @@ public class GamePanel extends JPanel implements Runnable {
             //Player
             player.draw(graphics2D);
 
+
             //UI
             ui.draw(graphics2D);
         }
 
         // Drawing tiles, objects, player, and UI
 
+        if(keyHandler.isTestMode){
+            eventHandler.drawEventRectangles(graphics2D);
+        }
 
         // Display debug information
-        if (keyHandler.isTestMode) {
-            drawEndTime = System.nanoTime();
-            graphics2D.setColor(Color.white);
-            graphics2D.drawString("Draw time: " + (drawEndTime - drawStartTime), 10, 400);
-            System.out.println(drawEndTime - drawStartTime);
-        }
 
         graphics.dispose();
     }

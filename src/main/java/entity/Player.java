@@ -13,7 +13,6 @@ public class Player extends Entity{
 
     public final int screenX;
     public final int screenY;
-    int standCounter = 0;
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler){
         super(gamePanel);
@@ -58,7 +57,7 @@ public class Player extends Entity{
 
     public void update(){
 
-        if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed){
+        if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed || keyHandler.enterPressed){
 
             if(keyHandler.upPressed){
                 direction = Direction.UP;
@@ -81,6 +80,10 @@ public class Player extends Entity{
 
             int npcIndex = gamePanel.collisionChecker.checkEntity(this, gamePanel.npc);
             interactNPC(npcIndex);
+
+            gamePanel.eventHandler.checkEvent();
+
+            gamePanel.keyHandler.enterPressed = false;
 
             if(collisionOn == false){
                 switch (direction) {
@@ -118,7 +121,6 @@ public class Player extends Entity{
                 gamePanel.npc[npcIndex].speak();
             }
         }
-        gamePanel.keyHandler.enterPressed = false;
     }
 
     public void draw(Graphics2D graphics2D){
