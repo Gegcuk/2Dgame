@@ -1,0 +1,40 @@
+[
+  {
+    "name": "Key",
+    "imageName": "key.png",
+    "collisionOn": false
+  },
+  {
+    "name": "Door",
+    "imageName": "door.png",
+    "collisionOn": true
+  },
+  {
+    "name": "Chest",
+    "imageName": "chest.png",
+    "collisionOn": false
+  },
+  {
+    "name": "Boots",
+    "imageName": "boots.png",
+    "collisionOn": false
+  },
+  {
+    "name": "Heart",
+    "states": [
+      {
+        "stateName": "Full",
+        "imageName": "heart_full.png"
+      },
+      {
+        "stateName": "Half",
+        "imageName": "heart_half.png"
+      },
+      {
+        "stateName": "Empty",
+        "imageName": "heart_blank.png"
+      }
+    ],
+    "collisionOn": false
+  }
+]
