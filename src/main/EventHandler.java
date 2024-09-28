@@ -61,6 +61,7 @@ public class EventHandler {
             System.out.println("Player Position: (" + gamePanel.player.worldX + ", " + gamePanel.player.worldY + ")");
             System.out.println("Event Position: (" + eventCol * gamePanel.tileSize + ", " + eventRow * gamePanel.tileSize + ")");
             System.out.println("Player Direction: " + gamePanel.player.direction);
+            System.out.println("Event intersects: " + gamePanel.player.solidArea.intersects(eventRect));
         }
 
         // Allow interaction regardless of direction

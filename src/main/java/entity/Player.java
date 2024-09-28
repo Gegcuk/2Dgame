@@ -38,7 +38,7 @@ public class Player extends Entity{
         worldX = gamePanel.tileSize * 23;
         worldY = gamePanel.tileSize * 21;
         speed = 4;
-        direction = Direction.DOWN;
+        direction = Direction.ANY;
 
         maxLife = 6;
         life = maxLife;
@@ -85,7 +85,7 @@ public class Player extends Entity{
 
             gamePanel.keyHandler.enterPressed = false;
 
-            if(collisionOn == false){
+            if(!collisionOn && (keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed)){
                 switch (direction) {
                     case Direction.UP -> worldY -= speed;
                     case Direction.DOWN -> worldY += speed;
@@ -132,7 +132,7 @@ public class Player extends Entity{
                 if (spriteNum == 1) image = up1;
                 if (spriteNum == 2) image = up2;
             }
-            case DOWN -> {
+            case DOWN, ANY -> {
                 if (spriteNum == 1) image = down1;
                 if (spriteNum == 2) image = down2;
             }
@@ -145,6 +145,7 @@ public class Player extends Entity{
                 if (spriteNum == 2) image = right2;
             }
         }
+
         graphics2D.drawImage(image, screenX, screenY,null);
 
         //DEBUGGING

@@ -22,7 +22,6 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
 
-
         //Title state
         if(gamePanel.gameState == gamePanel.titleState){
 
