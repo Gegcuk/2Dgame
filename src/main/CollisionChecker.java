@@ -1,6 +1,9 @@
 package main;
 
 import entity.Entity;
+import object.GameObject;
+
+import java.util.List;
 
 public class CollisionChecker {
 
@@ -62,48 +65,46 @@ public class CollisionChecker {
     public int checkObject(Entity entity, boolean player){
         int index = 999;
 
-        for(int i = 0; i < gamePanel.objects.length; i++){
-            if(gamePanel.objects[i] != null){
+        List<GameObject> objects = gamePanel.objectManager.getGameObjects();
+        for (int i = 0; i < objects.size(); i++) {
+            GameObject object = objects.get(i);
+            if (object != null) {
+                // Save the original positions
+                int entitySolidAreaX = entity.solidArea.x;
+                int entitySolidAreaY = entity.solidArea.y;
+                int objectSolidAreaX = object.solidArea.x;
+                int objectSolidAreaY = object.solidArea.y;
+
+                // Adjust solid areas based on world positions
                 entity.solidArea.x = entity.worldX + entity.solidArea.x;
                 entity.solidArea.y = entity.worldY + entity.solidArea.y;
 
-                gamePanel.objects[i].solidArea.x = gamePanel.objects[i].worldX + gamePanel.objects[i].solidArea.x;
-                gamePanel.objects[i].solidArea.y = gamePanel.objects[i].worldY + gamePanel.objects[i].solidArea.y;
+                object.solidArea.x = object.worldX + object.solidArea.x;
+                object.solidArea.y = object.worldY + object.solidArea.y;
 
+                // Simulate movement
                 switch (entity.direction) {
-                    case UP -> {
-                        entity.solidArea.y -= entity.speed;
-                        if (entity.solidArea.intersects(gamePanel.objects[i].solidArea)) {
-                            if (gamePanel.objects[i].collisionOn) entity.collisionOn = true;
-                            if (player) index = i;
-                        }
+                    case UP -> entity.solidArea.y -= entity.speed;
+                    case DOWN -> entity.solidArea.y += entity.speed;
+                    case LEFT -> entity.solidArea.x -= entity.speed;
+                    case RIGHT -> entity.solidArea.x += entity.speed;
+                }
+
+                // Check for collision
+                if (entity.solidArea.intersects(object.solidArea)) {
+                    if (object.collisionOn) {
+                        entity.collisionOn = true;
                     }
-                    case DOWN -> {
-                        entity.solidArea.y += entity.speed;
-                        if (entity.solidArea.intersects(gamePanel.objects[i].solidArea)) {
-                            if (gamePanel.objects[i].collisionOn) entity.collisionOn = true;
-                            if (player) index = i;
-                        }
-                    }
-                    case LEFT -> {
-                        entity.solidArea.x -= entity.speed;
-                        if (entity.solidArea.intersects(gamePanel.objects[i].solidArea)) {
-                            if (gamePanel.objects[i].collisionOn) entity.collisionOn = true;
-                            if (player) index = i;
-                        }
-                    }
-                    case RIGHT -> {
-                        entity.solidArea.x += entity.speed;
-                        if (entity.solidArea.intersects(gamePanel.objects[i].solidArea)) {
-                            if (gamePanel.objects[i].collisionOn) entity.collisionOn = true;
-                            if (player) index = i;
-                        }
+                    if (player) {
+                        index = i;
                     }
                 }
-                entity.solidArea.x = entity.solidAreaDefaultX;
-                entity.solidArea.y = entity.solidAreaDefaultY;
-                gamePanel.objects[i].solidArea.x = gamePanel.objects[i].solidAreaDefaultX;
-                gamePanel.objects[i].solidArea.y = gamePanel.objects[i].solidAreaDefaultY;
+
+                // Reset solid areas to original positions
+                entity.solidArea.x = entitySolidAreaX;
+                entity.solidArea.y = entitySolidAreaY;
+                object.solidArea.x = objectSolidAreaX;
+                object.solidArea.y = objectSolidAreaY;
             }
         }
 

@@ -38,7 +38,7 @@ public class Player extends Entity{
         worldX = gamePanel.tileSize * 23;
         worldY = gamePanel.tileSize * 21;
         speed = 4;
-        direction = Direction.ANY;
+        direction = Direction.DOWN;
 
         maxLife = 6;
         life = maxLife;
@@ -73,6 +73,7 @@ public class Player extends Entity{
             }
 
             collisionOn = false;
+
             gamePanel.collisionChecker.checkTile(this);
 
             int objectIndex = gamePanel.collisionChecker.checkObject(this, true);
@@ -83,9 +84,7 @@ public class Player extends Entity{
 
             gamePanel.eventHandler.checkEvent();
 
-            gamePanel.keyHandler.enterPressed = false;
-
-            if(!collisionOn && (keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed)){
+            if(!collisionOn && !keyHandler.enterPressed){
                 switch (direction) {
                     case Direction.UP -> worldY -= speed;
                     case Direction.DOWN -> worldY += speed;
@@ -94,7 +93,8 @@ public class Player extends Entity{
                 }
             }
 
-            spriteCounter++;
+            if(!keyHandler.enterPressed)spriteCounter++;
+
             if(spriteCounter > 10){
                 if(spriteNum == 1) {
                     spriteNum = 2;
@@ -103,6 +103,8 @@ public class Player extends Entity{
                 }
                 spriteCounter = 0;
             }
+
+            gamePanel.keyHandler.enterPressed = false;
         }
     }
 
@@ -132,7 +134,7 @@ public class Player extends Entity{
                 if (spriteNum == 1) image = up1;
                 if (spriteNum == 2) image = up2;
             }
-            case DOWN, ANY -> {
+            case DOWN -> {
                 if (spriteNum == 1) image = down1;
                 if (spriteNum == 2) image = down2;
             }
@@ -145,7 +147,6 @@ public class Player extends Entity{
                 if (spriteNum == 2) image = right2;
             }
         }
-
         graphics2D.drawImage(image, screenX, screenY,null);
 
         //DEBUGGING

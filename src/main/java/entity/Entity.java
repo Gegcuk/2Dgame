@@ -3,6 +3,7 @@ package entity;
 import main.GamePanel;
 import main.UtilityTool;
 import util.Direction;
+import util.Renderable;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,7 +14,7 @@ import java.util.Objects;
 import static util.Direction.*;
 import static util.Direction.LEFT;
 
-public class Entity {
+public class Entity implements Renderable {
 
     public GamePanel gamePanel;
     public int worldX, worldY;
@@ -64,7 +65,7 @@ public class Entity {
         gamePanel.collisionChecker.checkObject(this, false);
         gamePanel.collisionChecker.checkPlayer(this);
 
-        if(collisionOn == false){
+        if(!collisionOn){
             switch (direction){
                 case Direction.UP: worldY -= speed; break;
                 case Direction.DOWN: worldY += speed; break;
@@ -84,17 +85,40 @@ public class Entity {
         }
     }
 
+    @Override
+    public int getWorldX() {
+        return this.worldX;
+    }
+
+    @Override
+    public int getWorldY() {
+        return this.worldY;
+    }
+
+    @Override
+    public int getScreenX() {
+        return worldX - gamePanel.player.worldX + gamePanel.player.screenX;
+    }
+
+    @Override
+    public int getScreenY() {
+        return worldY - gamePanel.player.worldY + gamePanel.player.screenY;
+    }
+
+    @Override
+    public int getHeight() {
+        return gamePanel.tileSize;
+    }
+
+    @Override
     public void draw(Graphics2D graphics2D) {
 
         BufferedImage image = null;
 
-        int screenX = worldX - gamePanel.player.worldX + gamePanel.player.screenX;
-        int screenY = worldY - gamePanel.player.worldY + gamePanel.player.screenY;
+        int screenX = getScreenX();
+        int screenY = getScreenY();
 
-        if(worldX + gamePanel.tileSize > gamePanel.player.worldX - gamePanel.player.screenX &&
-                worldX - gamePanel.tileSize < gamePanel.player.worldX + gamePanel.player.screenX &&
-                worldY + gamePanel.tileSize > gamePanel.player.worldY - gamePanel.player.screenY &&
-                worldY - gamePanel.tileSize < gamePanel.player.worldY + gamePanel.player.screenY){
+        if(onScreen()){
 
             switch (direction) {
                 case UP -> {
@@ -113,11 +137,21 @@ public class Entity {
                     if (spriteNum == 1) image = right1;
                     if (spriteNum == 2) image = right2;
                 }
+                default -> {
+                    image = down1;
+                }
             }
 
             graphics2D.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
 
         }
+    }
+
+    private boolean onScreen() {
+        return worldX + gamePanel.tileSize > gamePanel.player.worldX - gamePanel.player.screenX &&
+                worldX - gamePanel.tileSize < gamePanel.player.worldX + gamePanel.player.screenX &&
+                worldY + gamePanel.tileSize > gamePanel.player.worldY - gamePanel.player.screenY &&
+                worldY - gamePanel.tileSize < gamePanel.player.worldY + gamePanel.player.screenY;
     }
 
     public BufferedImage setup(String imagePath){

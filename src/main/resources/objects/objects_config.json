@@ -35,6 +35,6 @@
         "imageName": "heart_blank.png"
       }
     ],
-    "collisionOn": false
+    "collisionOn": true
   }
 ]

@@ -4,9 +4,11 @@ import entity.Entity;
 import entity.Player;
 import object.GameObject;
 import tile.TileManager;
+import util.Renderable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -95,6 +97,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     public ObjectManager objectManager;
 
+    ArrayList<Renderable> renderables = new ArrayList<>();
+
     /**
      * Constructor for the GamePanel class. Sets up the initial game panel size, background color,
      * and key listener.
@@ -107,6 +111,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
         this.objectManager = new ObjectManager(this);
         objectManager.loadObjects();
+
     }
 
     /**
@@ -183,24 +188,29 @@ public class GamePanel extends JPanel implements Runnable {
             ui.draw(graphics2D);
         } else {
             tileManager.draw(graphics2D);
+            renderables.clear();
 
             List<GameObject> gameObjects = objectManager.getGameObjects();
-            for (GameObject object : gameObjects) {
-                if (object != null) {
-                    object.draw(graphics2D, this);
+
+            for (GameObject obj : gameObjects) {
+                if (obj != null) {
+                    renderables.add(obj);
                 }
             }
 
-            //NPC
             for (Entity entity : npc) {
                 if (entity != null) {
-                    entity.draw(graphics2D);
+                    renderables.add(entity);
                 }
             }
 
-            //Player
-            player.draw(graphics2D);
+            renderables.add(player);
 
+            renderables.sort(Comparator.comparingInt(Renderable::getWorldY));
+
+            for(Renderable renderable : renderables){
+                renderable.draw(graphics2D);
+            }
 
             //UI
             ui.draw(graphics2D);

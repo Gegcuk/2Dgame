@@ -2,6 +2,7 @@ package object;
 
 import main.GamePanel;
 import main.UtilityTool;
+import util.Renderable;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class GameObject {
+public class GameObject implements Renderable {
 
     public Map<String, BufferedImage> stateImages;
     public String currentState;
@@ -23,9 +24,11 @@ public class GameObject {
     public int solidAreaDefaultX = 0;
     public int solidAreaDefaultY = 0;
     public UtilityTool utilityTool = new UtilityTool();
+    public GamePanel gamePanel;
 
     public GameObject(GameObjectConfig config, GamePanel gamePanel){
         this.name = config.getName();
+        this.gamePanel = gamePanel;
         this.collisionOn = config.isCollisionOn();
         this.solidArea = new Rectangle(0, 0, gamePanel.tileSize, gamePanel.tileSize);
         this.stateImages = new HashMap<>();
@@ -71,8 +74,8 @@ public class GameObject {
         }
     }
 
-
-    public void draw(Graphics2D graphics2D, GamePanel gamePanel){
+    @Override
+    public void draw(Graphics2D graphics2D){
 
         BufferedImage image = stateImages.get(currentState);
         if(image == null){
@@ -80,16 +83,44 @@ public class GameObject {
             return;
         }
 
-        int screenX = worldX - gamePanel.player.worldX + gamePanel.player.screenX;
-        int screenY = worldY - gamePanel.player.worldY + gamePanel.player.screenY;
+        int screenX = getScreenX();
+        int screenY = getScreenY();
 
-        if(worldX + gamePanel.tileSize > gamePanel.player.worldX - gamePanel.player.screenX &&
-            worldX - gamePanel.tileSize < gamePanel.player.worldX + gamePanel.player.screenX &&
-            worldY + gamePanel.tileSize > gamePanel.player.worldY - gamePanel.player.screenY &&
-            worldY - gamePanel.tileSize < gamePanel.player.worldY + gamePanel.player.screenY){
-
+        if(onScreen()){
             graphics2D.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
         }
     }
 
+    public boolean onScreen() {
+
+        return worldX + gamePanel.tileSize > gamePanel.player.worldX - gamePanel.player.screenX &&
+                worldX - gamePanel.tileSize < gamePanel.player.worldX + gamePanel.player.screenX &&
+                worldY + gamePanel.tileSize > gamePanel.player.worldY - gamePanel.player.screenY &&
+                worldY - gamePanel.tileSize < gamePanel.player.worldY + gamePanel.player.screenY;
+    }
+
+    @Override
+    public int getWorldX() {
+        return this.worldX;
+    }
+
+    @Override
+    public int getWorldY() {
+        return this.worldY;
+    }
+
+    @Override
+    public int getScreenX() {
+        return worldX - gamePanel.player.worldX + gamePanel.player.screenX;
+    }
+
+    @Override
+    public int getScreenY() {
+        return worldY - gamePanel.player.worldY + gamePanel.player.screenY;
+    }
+
+    @Override
+    public int getHeight() {
+        return gamePanel.tileSize;
+    }
 }

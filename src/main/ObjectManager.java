@@ -29,6 +29,11 @@ public class ObjectManager {
         heart.worldY = 10 * gamePanel.tileSize;
         heart.setState("Full");
         gameObjects.add(heart);
+
+        GameObject door = objectFactory.createGameObject("Door", gamePanel);
+        door.worldX = 10 * gamePanel.tileSize;
+        door.worldY = 12 * gamePanel.tileSize;
+        gameObjects.add(door);
     }
 
     public void updateHeartState(GameObject heart, int playerHealth){
