@@ -82,6 +82,8 @@ public class Player extends Entity{
             int npcIndex = gamePanel.collisionChecker.checkEntity(this, gamePanel.npc);
             interactNPC(npcIndex);
 
+            int monsterIndex = gamePanel.collisionChecker.checkEntity(this, gamePanel.monsters);
+            contactMonster(monsterIndex);
             gamePanel.eventHandler.checkEvent();
 
             if(!collisionOn && !keyHandler.enterPressed){
@@ -106,6 +108,16 @@ public class Player extends Entity{
 
             gamePanel.keyHandler.enterPressed = false;
         }
+        if(invincible){
+            invincibleCounter++;
+            if(invincibleCounter > 30) {
+                invincible=false;
+                invincibleCounter = 0;
+            }
+        }
+        if(keyHandler.isTestMode){
+            System.out.println("Invincible counter = " + invincibleCounter);
+        }
     }
 
 
@@ -121,6 +133,15 @@ public class Player extends Entity{
             if(gamePanel.keyHandler.enterPressed){
                 gamePanel.gameState = gamePanel.dialogState;
                 gamePanel.npc[npcIndex].speak();
+            }
+        }
+    }
+
+    private void contactMonster(int monsterIndex) {
+        if (monsterIndex != 999){
+            if(!invincible) {
+                life--;
+                invincible = true;
             }
         }
     }
@@ -147,8 +168,14 @@ public class Player extends Entity{
                 if (spriteNum == 2) image = right2;
             }
         }
+
+        if(invincible){
+            graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+        }
+
         graphics2D.drawImage(image, screenX, screenY,null);
 
+        graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         //DEBUGGING
         if(keyHandler.isTestMode){
             graphics2D.setColor(Color.RED);

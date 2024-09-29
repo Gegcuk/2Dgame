@@ -1,5 +1,6 @@
-package entity;
+package npc;
 
+import entity.Entity;
 import main.GamePanel;
 import util.Direction;
 

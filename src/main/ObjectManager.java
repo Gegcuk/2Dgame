@@ -25,15 +25,20 @@ public class ObjectManager {
 
     public void loadObjects(){
         GameObject heart = objectFactory.createGameObject("Heart", gamePanel);
-        heart.worldX = 10 * gamePanel.tileSize;
-        heart.worldY = 10 * gamePanel.tileSize;
+        heart.setWorldX(10);
+        heart.setWorldY(10);
         heart.setState("Full");
         gameObjects.add(heart);
 
-        GameObject door = objectFactory.createGameObject("Door", gamePanel);
-        door.worldX = 10 * gamePanel.tileSize;
-        door.worldY = 12 * gamePanel.tileSize;
-        gameObjects.add(door);
+//        GameObject door = objectFactory.createGameObject("Door", gamePanel);
+//        door.setWorldX(10);
+//        door.setWorldY(12);
+//        gameObjects.add(door);
+
+        GameObject door2 = objectFactory.createGameObject("Door", gamePanel);
+        door2.setWorldX(23);
+        door2.setWorldY(15);
+        gameObjects.add(door2);
     }
 
     public void updateHeartState(GameObject heart, int playerHealth){

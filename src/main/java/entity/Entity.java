@@ -19,9 +19,10 @@ public class Entity implements Renderable {
     public GamePanel gamePanel;
     public int worldX, worldY;
     public int speed;
+    public String name;
 
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    public Direction direction;
+    public Direction direction = ANY;
 
     public int spriteCounter = 0;
     public int spriteNum = 1;
@@ -30,11 +31,14 @@ public class Entity implements Renderable {
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
     public int actionLockCounter;
-    String[] dialogue = new String[20];
+    public String[] dialogue = new String[20];
     public int dialogueIndex = 0;
 
     public int maxLife;
     public int life;
+    public boolean invincible = false;
+    public int invincibleCounter = 0;
+    public int type;
 
     public Entity(GamePanel gamePanel){
         this.gamePanel = gamePanel;
@@ -63,14 +67,23 @@ public class Entity implements Renderable {
         collisionOn = false;
         gamePanel.collisionChecker.checkTile(this);
         gamePanel.collisionChecker.checkObject(this, false);
-        gamePanel.collisionChecker.checkPlayer(this);
+        gamePanel.collisionChecker.checkEntity(this, gamePanel.monsters);
+        gamePanel.collisionChecker.checkEntity(this, gamePanel.npc);
+        boolean contactPlayer = gamePanel.collisionChecker.checkPlayer(this);
+
+        if(type == 2 && contactPlayer){
+            if(!gamePanel.player.invincible){
+                gamePanel.player.life--;
+                gamePanel.player.invincible = true;
+            }
+        }
 
         if(!collisionOn){
             switch (direction){
-                case Direction.UP: worldY -= speed; break;
-                case Direction.DOWN: worldY += speed; break;
-                case Direction.LEFT: worldX -= speed; break;
-                case Direction.RIGHT: worldX += speed; break;
+                case UP: worldY -= speed; break;
+                case DOWN: worldY += speed; break;
+                case LEFT: worldX -= speed; break;
+                case RIGHT: worldX += speed; break;
             }
         }
 
@@ -168,5 +181,11 @@ public class Entity implements Renderable {
     }
 
 
+    public void setWorldX(int worldX) {
+        this.worldX = worldX * gamePanel.tileSize;
+    }
 
+    public void setWorldY(int worldY) {
+        this.worldY = worldY * gamePanel.tileSize;
+    }
 }

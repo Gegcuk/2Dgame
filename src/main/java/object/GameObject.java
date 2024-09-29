@@ -104,6 +104,14 @@ public class GameObject implements Renderable {
         return this.worldX;
     }
 
+    public void setWorldX(int worldX) {
+        this.worldX = worldX * gamePanel.tileSize;
+    }
+
+    public void setWorldY(int worldY) {
+        this.worldY = worldY * gamePanel.tileSize;
+    }
+
     @Override
     public int getWorldY() {
         return this.worldY;
