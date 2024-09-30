@@ -22,6 +22,7 @@ public class Entity implements Renderable {
     public String name;
 
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
     public Direction direction = ANY;
 
     public int spriteCounter = 0;
@@ -39,6 +40,7 @@ public class Entity implements Renderable {
     public boolean invincible = false;
     public int invincibleCounter = 0;
     public int type;
+    public boolean attacking = false;
 
     public Entity(GamePanel gamePanel){
         this.gamePanel = gamePanel;
@@ -174,6 +176,19 @@ public class Entity implements Renderable {
         try{
             scaledImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(imagePath +".png")));
             scaledImage = utilityTool.scaleImage(scaledImage, gamePanel.tileSize, gamePanel.tileSize);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        return scaledImage;
+    }
+
+    public BufferedImage setup(String imagePath, int width, int height){
+        UtilityTool utilityTool = new UtilityTool();
+        BufferedImage scaledImage = null;
+
+        try{
+            scaledImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(imagePath +".png")));
+            scaledImage = utilityTool.scaleImage(scaledImage, width, height);
         } catch (IOException e){
             e.printStackTrace();
         }

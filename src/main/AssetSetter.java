@@ -18,8 +18,8 @@ public class AssetSetter {
 
     public void setNPC(){
         gamePanel.npc[0] = new NPC_OldMan(gamePanel);
-        gamePanel.npc[0].setWorldX(9);
-        gamePanel.npc[0].setWorldY(10);
+        gamePanel.npc[0].setWorldX(23);
+        gamePanel.npc[0].setWorldY(19);
     }
 
     public void setMonster(){
