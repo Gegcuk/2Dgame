@@ -29,6 +29,7 @@ public class Entity implements Renderable {
     public int spriteNum = 1;
 
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
+    public Rectangle attackArea = new Rectangle(0, 0,0, 0);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
     public int actionLockCounter;
@@ -98,6 +99,14 @@ public class Entity implements Renderable {
             }
             spriteCounter = 0;
         }
+
+        if(invincible){
+            invincibleCounter++;
+            if(invincibleCounter > 40) {
+                invincible=false;
+                invincibleCounter = 0;
+            }
+        }
     }
 
     @Override
@@ -156,8 +165,13 @@ public class Entity implements Renderable {
                     image = down1;
                 }
             }
+            if(invincible){
+                graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+            }
 
             graphics2D.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+
+            graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
         }
     }

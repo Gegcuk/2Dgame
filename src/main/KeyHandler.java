@@ -69,8 +69,7 @@ public class KeyHandler implements KeyListener {
                 }
             }
         }
-
-        if(gamePanel.gameState == gamePanel.playState){
+        else if(gamePanel.gameState == gamePanel.playState){
             if(code == KeyEvent.VK_DOWN){
                 downPressed = true;
             }

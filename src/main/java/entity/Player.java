@@ -29,6 +29,9 @@ public class Player extends Entity{
         solidArea.width = gamePanel.originalTileSize;
         solidArea.height = gamePanel.originalTileSize;
         System.out.println(solidArea.x + " " + solidArea.y + " " + solidArea.width + " " + solidArea.height);
+        attackArea.width = 36;
+        attackArea.height = 36;
+
 
         setDefaultValues();
         getPlayerImage();
@@ -139,11 +142,52 @@ public class Player extends Entity{
     private void attacking() {
         spriteCounter++;
         if(spriteCounter <= 5) spriteNum = 1;
-        if(spriteCounter > 5 && spriteNum <= 25) spriteNum = 2;
+        if(spriteCounter > 5 && spriteNum <= 25) {
+            spriteNum = 2;
+            int currentWorldX = worldX;
+            int currentWorldY = worldY;
+            int solidAreaWidth = solidArea.width;
+            int solidAreaHeight = solidArea.height;
+
+            switch(direction) {
+                case UP -> worldY -= attackArea.height;
+                case DOWN -> worldY += attackArea.height;
+                case LEFT -> worldX -= attackArea.width;
+                case RIGHT -> worldX += attackArea.width;
+            }
+
+            solidArea.width = attackArea.width;
+            solidArea.height = attackArea.height;
+
+            int monsterIndex = gamePanel.collisionChecker.checkEntity(this, gamePanel.monsters);
+            damageMonster(monsterIndex);
+
+
+            worldX = currentWorldX;
+            worldY = currentWorldY;
+            solidArea.width = solidAreaWidth;
+            solidArea.height = solidAreaHeight;
+        }
         if(spriteCounter > 25) {
             spriteNum = 1;
             spriteCounter = 0;
             attacking = false;
+        }
+    }
+
+    private void damageMonster(int monsterIndex) {
+        if(monsterIndex != 999){
+            if(!gamePanel.monsters[monsterIndex].invincible){
+                gamePanel.monsters[monsterIndex].life--;
+                System.out.println(gamePanel.monsters[monsterIndex].life);
+                gamePanel.monsters[monsterIndex].invincible = true;
+
+                if(gamePanel.monsters[monsterIndex].life <= 0){
+                    gamePanel.monsters[monsterIndex] = null;
+                }
+            }
+        } else {
+            System.out.println("miss");
         }
     }
 
