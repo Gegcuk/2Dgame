@@ -16,39 +16,61 @@ import static util.Direction.LEFT;
 
 public class Entity implements Renderable {
 
-    public GamePanel gamePanel;
-    public int worldX, worldY;
-    public int speed;
-    public String name;
+    // Constants and Static Imports
+    public static final int DEFAULT_WIDTH = 48;
+    public static final int DEFAULT_HEIGHT = 48;
 
-    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
+    // Core Components
+    public GamePanel gamePanel;
     public Direction direction = ANY;
 
+    // Position and Movement
+    public int worldX, worldY;
+    public int speed;
+
+    // Collision Areas
+    public Rectangle solidArea = new Rectangle(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
+    public int solidAreaDefaultX, solidAreaDefaultY;
+
+    // Graphics and Animation
+    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
     public int spriteCounter = 0;
     public int spriteNum = 1;
 
-    public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
-    public Rectangle attackArea = new Rectangle(0, 0,0, 0);
-    public int solidAreaDefaultX, solidAreaDefaultY;
-    public boolean collisionOn = false;
-    public int actionLockCounter;
-    public String[] dialogue = new String[20];
-    public int dialogueIndex = 0;
-
+    // Entity Attributes
+    public String name;
+    public int type;
     public int maxLife;
     public int life;
+
+    // State Flags
+    public boolean collisionOn = false;
     public boolean invincible = false;
-    public int invincibleCounter = 0;
-    public int type;
     public boolean attacking = false;
+    public boolean alive = true;
+    public boolean dying = false;
+
+    // Counters and Timing
+    public int actionLockCounter;
+    public int invincibleCounter = 0;
+    public int dyingCounter = 0;
+
+    // Dialogue
+    public String[] dialogue = new String[20];
+    public int dialogueIndex = 0;
 
     public Entity(GamePanel gamePanel){
         this.gamePanel = gamePanel;
     }
 
-
     public void setAction(){}
+
+    public void damageReaction(){
+
+    }
+
     public void speak(){
         if(dialogue[dialogueIndex] == null){
             dialogueIndex = 0;
@@ -76,6 +98,7 @@ public class Entity implements Renderable {
 
         if(type == 2 && contactPlayer){
             if(!gamePanel.player.invincible){
+                gamePanel.playSE(6);
                 gamePanel.player.life--;
                 gamePanel.player.invincible = true;
             }
@@ -165,15 +188,60 @@ public class Entity implements Renderable {
                     image = down1;
                 }
             }
-            if(invincible){
-                graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+
+            if (type == 2) {
+
+                int barLength = (int) (gamePanel.tileSize * ((double) life / maxLife));
+
+                if (barLength != gamePanel.tileSize) {
+                    graphics2D.setColor(new Color(35, 35, 35));
+                    graphics2D.fillRect(screenX - 1, screenY - 11, gamePanel.tileSize + 2, 12);
+                    graphics2D.setColor(new Color(255, 0, 30));
+                    graphics2D.fillRect(screenX, screenY - 10, barLength, 10);
+
+                }
             }
+
+            if(invincible) graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+            if(dying) dyingAnimation(graphics2D);
 
             graphics2D.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
 
             graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
         }
+    }
+
+    private void dyingAnimation(Graphics2D graphics2D) {
+        dyingCounter++;
+        int dyingLength = 5;
+        if(dyingCounter <= dyingLength){
+            graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
+        }
+        if(dyingCounter <= dyingLength * 2 && dyingCounter > dyingLength){
+            graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
+        }
+        if(dyingCounter <= dyingLength * 3 && dyingCounter > dyingLength * 2){
+            graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
+        }
+        if(dyingCounter <= dyingLength * 4 && dyingCounter > dyingLength * 3){
+            graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
+        }
+        if(dyingCounter <= dyingLength * 5 && dyingCounter > dyingLength * 4){
+            graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
+        }
+        if(dyingCounter <= dyingLength * 6 && dyingCounter > dyingLength * 5){
+            graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
+        }
+        if(dyingCounter <= dyingLength * 7 && dyingCounter > dyingLength * 6){
+            graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
+        }
+
+        if(dyingCounter > dyingLength * 7){
+            dying = false;
+            alive = false;
+        }
+
     }
 
     private boolean onScreen() {
@@ -208,7 +276,6 @@ public class Entity implements Renderable {
         }
         return scaledImage;
     }
-
 
     public void setWorldX(int worldX) {
         this.worldX = worldX * gamePanel.tileSize;

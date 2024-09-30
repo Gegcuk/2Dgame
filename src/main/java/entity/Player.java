@@ -178,12 +178,13 @@ public class Player extends Entity{
     private void damageMonster(int monsterIndex) {
         if(monsterIndex != 999){
             if(!gamePanel.monsters[monsterIndex].invincible){
+                gamePanel.playSE(5);
                 gamePanel.monsters[monsterIndex].life--;
-                System.out.println(gamePanel.monsters[monsterIndex].life);
                 gamePanel.monsters[monsterIndex].invincible = true;
+                gamePanel.monsters[monsterIndex].damageReaction();
 
                 if(gamePanel.monsters[monsterIndex].life <= 0){
-                    gamePanel.monsters[monsterIndex] = null;
+                    gamePanel.monsters[monsterIndex].dying  = true;
                 }
             }
         } else {
@@ -204,13 +205,18 @@ public class Player extends Entity{
             if(npcIndex != 999){
                 gamePanel.gameState = gamePanel.dialogState;
                 gamePanel.npc[npcIndex].speak();
-            } else attacking = true;
+            } else {
+                gamePanel.playSE(7);
+                attacking = true;
+
+            }
         }
     }
 
     private void contactMonster(int monsterIndex) {
         if (monsterIndex != 999){
             if(!invincible) {
+                gamePanel.playSE(6);
                 life--;
                 invincible = true;
             }
