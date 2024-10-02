@@ -9,6 +9,7 @@ import java.util.List;
 public class ObjectManager {
 
     private GamePanel gamePanel;
+
     private GameObjectFactory objectFactory;
 
     public List<GameObject> getGameObjects() {
@@ -49,6 +50,10 @@ public class ObjectManager {
         } else if(playerHealth == 0){
             heart.setState("Empty");
         }
+    }
+
+    public GameObjectFactory getObjectFactory() {
+        return objectFactory;
     }
 
 }

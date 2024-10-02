@@ -24,90 +24,116 @@ public class KeyHandler implements KeyListener {
 
         //Title state
         if(gamePanel.gameState == gamePanel.titleState){
-
-            if(gamePanel.ui.titleScreenState == 0){
-                if(code == KeyEvent.VK_UP)
-                    if (gamePanel.ui.commandNumber > 0) gamePanel.ui.commandNumber--;
-                if(code == KeyEvent.VK_DOWN) {
-                    if (gamePanel.ui.commandNumber < 2) gamePanel.ui.commandNumber++;
-                    System.out.println(gamePanel.ui.commandNumber);
-                }
-                if(code == KeyEvent.VK_ENTER){
-                    if(gamePanel.ui.commandNumber == 0){
-                        gamePanel.ui.titleScreenState = 1;
-                    }
-                    if(gamePanel.ui.commandNumber == 1) {
-
-                    }
-                    if(gamePanel.ui.commandNumber == 2) {
-                        System.exit(0);
-                    }
-                }
-            } else if(gamePanel.ui.titleScreenState == 1){
-                if(code == KeyEvent.VK_UP)
-                    if (gamePanel.ui.commandNumber > 0) gamePanel.ui.commandNumber--;
-                if(code == KeyEvent.VK_DOWN) {
-                    if (gamePanel.ui.commandNumber < 3) gamePanel.ui.commandNumber++;
-                }
-                if(code == KeyEvent.VK_ENTER){
-                    if(gamePanel.ui.commandNumber == 0){
-                        System.out.println("You chose Viking!");
-                        gamePanel.gameState = gamePanel.playState;
-                    }
-                    if(gamePanel.ui.commandNumber == 1) {
-                        System.out.println("You chose Mage!");
-                        gamePanel.gameState = gamePanel.playState;
-                    }
-                    if(gamePanel.ui.commandNumber == 2) {
-                        System.out.println("You chose Archer!");
-                        gamePanel.gameState = gamePanel.playState;
-                    }
-                    if(gamePanel.ui.commandNumber == 3) {
-                        gamePanel.ui.commandNumber = 0;
-                        gamePanel.ui.titleScreenState = 0;
-                    }
-                }
-            }
+            titleState(code);
         }
         else if(gamePanel.gameState == gamePanel.playState){
-            if(code == KeyEvent.VK_DOWN){
-                downPressed = true;
-            }
-            if(code == KeyEvent.VK_UP){
-                upPressed = true;
-            }
-            if(code == KeyEvent.VK_LEFT){
-                leftPressed = true;
-            }
-            if(code == KeyEvent.VK_RIGHT){
-                rightPressed = true;
-            }
-            if(code == KeyEvent.VK_P){
-                gamePanel.gameState = gamePanel.pauseState;
-            }
-            if(code == KeyEvent.VK_ENTER){
-                System.out.println(gamePanel.player.direction);
-                enterPressed = true;
-            }
-            if(code == KeyEvent.VK_T){
-                isTestMode = !isTestMode;
-            }
+            playState(code);
         }
-        if(gamePanel.gameState == gamePanel.pauseState){
-            if(code == KeyEvent.VK_P){
-                gamePanel.gameState = gamePanel.playState;
-            }
+        else if(gamePanel.gameState == gamePanel.pauseState){
+            pauseState(code);
         }
-        if(gamePanel.gameState == gamePanel.dialogState){
-            if(code == KeyEvent.VK_ENTER){
-                gamePanel.gameState = gamePanel.playState;
-            }
+        else if(gamePanel.gameState == gamePanel.dialogState){
+            dialogueState(code);
+        }
+        else if(gamePanel.gameState == gamePanel.characterState){
+            characterState(code);
         }
 
         if(code == KeyEvent.VK_M){
             gamePanel.stopMusic();
         }
 
+    }
+
+    private void characterState(int code) {
+        if(code == KeyEvent.VK_I) {
+            gamePanel.gameState = gamePanel.playState;
+        }
+    }
+
+    private void dialogueState(int code) {
+        if(code == KeyEvent.VK_ENTER){
+            gamePanel.gameState = gamePanel.playState;
+        }
+    }
+
+    private void pauseState(int code) {
+        if(code == KeyEvent.VK_P){
+            gamePanel.gameState = gamePanel.playState;
+        }
+    }
+
+    private void playState(int code) {
+        if(code == KeyEvent.VK_DOWN){
+            downPressed = true;
+        }
+        if(code == KeyEvent.VK_UP){
+            upPressed = true;
+        }
+        if(code == KeyEvent.VK_LEFT){
+            leftPressed = true;
+        }
+        if(code == KeyEvent.VK_RIGHT){
+            rightPressed = true;
+        }
+        if(code == KeyEvent.VK_P){
+            gamePanel.gameState = gamePanel.pauseState;
+        }
+        if(code == KeyEvent.VK_I) {
+            gamePanel.gameState = gamePanel.characterState;
+        }
+        if(code == KeyEvent.VK_ENTER){
+            enterPressed = true;
+        }
+        if(code == KeyEvent.VK_T){
+            isTestMode = !isTestMode;
+        }
+    }
+
+    private void titleState(int code) {
+        if(gamePanel.ui.titleScreenState == 0){
+            if(code == KeyEvent.VK_UP)
+                if (gamePanel.ui.commandNumber > 0) gamePanel.ui.commandNumber--;
+            if(code == KeyEvent.VK_DOWN) {
+                if (gamePanel.ui.commandNumber < 2) gamePanel.ui.commandNumber++;
+                System.out.println(gamePanel.ui.commandNumber);
+            }
+            if(code == KeyEvent.VK_ENTER){
+                if(gamePanel.ui.commandNumber == 0){
+                    gamePanel.ui.titleScreenState = 1;
+                }
+                if(gamePanel.ui.commandNumber == 1) {
+
+                }
+                if(gamePanel.ui.commandNumber == 2) {
+                    System.exit(0);
+                }
+            }
+        } else if(gamePanel.ui.titleScreenState == 1){
+            if(code == KeyEvent.VK_UP)
+                if (gamePanel.ui.commandNumber > 0) gamePanel.ui.commandNumber--;
+            if(code == KeyEvent.VK_DOWN) {
+                if (gamePanel.ui.commandNumber < 3) gamePanel.ui.commandNumber++;
+            }
+            if(code == KeyEvent.VK_ENTER){
+                if(gamePanel.ui.commandNumber == 0){
+                    System.out.println("You chose Viking!");
+                    gamePanel.gameState = gamePanel.playState;
+                }
+                if(gamePanel.ui.commandNumber == 1) {
+                    System.out.println("You chose Mage!");
+                    gamePanel.gameState = gamePanel.playState;
+                }
+                if(gamePanel.ui.commandNumber == 2) {
+                    System.out.println("You chose Archer!");
+                    gamePanel.gameState = gamePanel.playState;
+                }
+                if(gamePanel.ui.commandNumber == 3) {
+                    gamePanel.ui.commandNumber = 0;
+                    gamePanel.ui.titleScreenState = 0;
+                }
+            }
+        }
     }
 
     @Override

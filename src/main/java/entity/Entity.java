@@ -2,6 +2,7 @@ package entity;
 
 import main.GamePanel;
 import main.UtilityTool;
+import object.GameObject;
 import util.Direction;
 import util.Renderable;
 
@@ -9,7 +10,9 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.List;
 
 import static util.Direction.*;
 import static util.Direction.LEFT;
@@ -44,6 +47,18 @@ public class Entity implements Renderable {
     public int type;
     public int maxLife;
     public int life;
+    public int level;
+    public int strength;
+    public int dexterity;
+    public int attack;
+    public int defense;
+    public int exp;
+    public int nextLevelExp;
+    public int coin;
+
+    public int attackValue;
+    public int defenseValue;
+
 
     // State Flags
     public boolean collisionOn = false;
@@ -61,8 +76,38 @@ public class Entity implements Renderable {
     public String[] dialogue = new String[20];
     public int dialogueIndex = 0;
 
+    public List<GameObject> inventory;
+    public GameObject equippedWeapon;
+    public GameObject equippedShield;
+
     public Entity(GamePanel gamePanel){
         this.gamePanel = gamePanel;
+        this.inventory = new ArrayList<>();
+    }
+
+    public void addItemToInventory(GameObject item){
+        inventory.add(item);
+        if(gamePanel.keyHandler.isTestMode){
+            System.out.println(item.name + " added to inventory");
+        }
+    }
+
+    public void equipWeapon(GameObject weapon){
+        if(weapon != null && inventory.contains(weapon)){
+            equippedWeapon = weapon;
+            if(gamePanel.keyHandler.isTestMode) System.out.println(weapon.name + " has been equipped");
+        } else {
+            if(gamePanel.keyHandler.isTestMode) System.out.println("Weapon is not in the inventory");
+        }
+    }
+
+    public void equipShield(GameObject shield){
+        if(shield != null && inventory.contains(shield)){
+            equippedShield = shield;
+            if(gamePanel.keyHandler.isTestMode) System.out.println(shield.name + " has been equipped");
+        } else {
+            if(gamePanel.keyHandler.isTestMode) System.out.println("Shield is not in the inventory");
+        }
     }
 
     public void setAction(){}
@@ -283,5 +328,13 @@ public class Entity implements Renderable {
 
     public void setWorldY(int worldY) {
         this.worldY = worldY * gamePanel.tileSize;
+    }
+
+    public GameObject getEquippedWeapon() {
+        return equippedWeapon;
+    }
+
+    public GameObject getEquippedShield() {
+        return equippedShield;
     }
 }

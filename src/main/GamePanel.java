@@ -45,7 +45,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxWorldRows = 50;
 
     /** Frames per second (FPS) for the game loop. */
-    int FPS = 60;
+    public final int FPS = 60;
 
     /** Manages the game's tile rendering. */
     public TileManager tileManager = new TileManager(this);
@@ -74,7 +74,7 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
 
     /** The player object representing the main character. */
-    public Player player = new Player(this, keyHandler);
+    public Player player;
 
     /** Array of objects present in the game world. */
     public Entity[] monsters = new Entity[20];
@@ -94,6 +94,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     public final int dialogState = 3;
 
+    public final int characterState = 4;
+
     public ObjectManager objectManager;
 
     ArrayList<Renderable> renderables = new ArrayList<>();
@@ -110,6 +112,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
         this.objectManager = new ObjectManager(this);
         objectManager.loadObjects();
+        this.player = new Player(this, keyHandler);
 
     }
 

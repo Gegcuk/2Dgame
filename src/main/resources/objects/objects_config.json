@@ -1,5 +1,18 @@
 [
   {
+    "name": "Sword",
+    "imageName": "sword_normal.png",
+    "collisionOn": false,
+    "attack": 10,
+    "defense": 0
+  },
+  {
+    "name": "Shield",
+    "imageName": "shield_wood.png",
+    "attack": 0,
+    "defense": 5
+  },
+  {
     "name": "Key",
     "imageName": "key.png",
     "collisionOn": false

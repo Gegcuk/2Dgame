@@ -26,12 +26,17 @@ public class GameObject implements Renderable {
     public UtilityTool utilityTool = new UtilityTool();
     public GamePanel gamePanel;
 
+    private int attack;
+    private int defense;
+
     public GameObject(GameObjectConfig config, GamePanel gamePanel){
         this.name = config.getName();
         this.gamePanel = gamePanel;
         this.collisionOn = config.isCollisionOn();
         this.solidArea = new Rectangle(0, 0, gamePanel.tileSize, gamePanel.tileSize);
         this.stateImages = new HashMap<>();
+        this.attack = config.getAttack();
+        this.defense = config.getDefense();
 
         if(config.getStates() != null && !config.getStates().isEmpty()){
             loadStateImages(config.getStates(), gamePanel.tileSize);
@@ -131,4 +136,13 @@ public class GameObject implements Renderable {
     public int getHeight() {
         return gamePanel.tileSize;
     }
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public int getDefense() {
+        return defense;
+    }
+
 }

@@ -2,6 +2,10 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import main.ObjectManager;
+import object.GameObject;
+import object.GameObjectConfig;
+import object.GameObjectFactory;
 import util.Direction;
 
 import java.awt.*;
@@ -13,6 +17,7 @@ public class Player extends Entity{
 
     public final int screenX;
     public final int screenY;
+    public boolean attackCanceled;
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler){
         super(gamePanel);
@@ -43,9 +48,30 @@ public class Player extends Entity{
         worldY = gamePanel.tileSize * 21;
         speed = 4;
         direction = Direction.DOWN;
+        inventory.add(gamePanel.objectManager.getObjectFactory().createGameObject("Shield", gamePanel));
+        inventory.add(gamePanel.objectManager.getObjectFactory().createGameObject("Sword", gamePanel));
+        equippedShield = inventory.get(0);
+        equippedWeapon = inventory.get(1);
 
         maxLife = 6;
         life = maxLife;
+        level = 1;
+        strength = 1;
+        dexterity = 1;
+        exp = 0;
+        nextLevelExp = 10;
+        coin = 0;
+        attack = getAttack();
+        defense = getDefense();
+
+    }
+
+    private int getDefense() {
+        return dexterity * equippedShield.getDefense();
+    }
+
+    private int getAttack() {
+        return strength * equippedWeapon.getAttack();
     }
 
     public void getPlayerImage(){
@@ -114,6 +140,14 @@ public class Player extends Entity{
                 }
             }
 
+            if(keyHandler.enterPressed && !attackCanceled){
+                gamePanel.playSE(7);
+                attacking = true;
+                spriteCounter = 0;
+            }
+
+            gamePanel.keyHandler.enterPressed = false;
+
             if(!keyHandler.enterPressed)spriteCounter++;
 
             if(spriteCounter > 10){
@@ -125,7 +159,6 @@ public class Player extends Entity{
                 spriteCounter = 0;
             }
 
-            gamePanel.keyHandler.enterPressed = false;
         }
         if(invincible){
             invincibleCounter++;
@@ -179,16 +212,15 @@ public class Player extends Entity{
         if(monsterIndex != 999){
             if(!gamePanel.monsters[monsterIndex].invincible){
                 gamePanel.playSE(5);
-                gamePanel.monsters[monsterIndex].life--;
+                gamePanel.monsters[monsterIndex].life -= attack;
                 gamePanel.monsters[monsterIndex].invincible = true;
                 gamePanel.monsters[monsterIndex].damageReaction();
-
+                System.out.println(equippedWeapon.name + " " + equippedWeapon.getAttack());
+                System.out.println(equippedShield.name + " " + equippedShield.getDefense());
                 if(gamePanel.monsters[monsterIndex].life <= 0){
                     gamePanel.monsters[monsterIndex].dying  = true;
                 }
             }
-        } else {
-            System.out.println("miss");
         }
     }
 
@@ -203,12 +235,9 @@ public class Player extends Entity{
     private void interactNPC(int npcIndex) {
         if(keyHandler.enterPressed){
             if(npcIndex != 999){
+                attackCanceled = true;
                 gamePanel.gameState = gamePanel.dialogState;
                 gamePanel.npc[npcIndex].speak();
-            } else {
-                gamePanel.playSE(7);
-                attacking = true;
-
             }
         }
     }

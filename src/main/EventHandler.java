@@ -105,6 +105,7 @@ public class EventHandler {
     private void damagePit(int col, int row, int gameState) {
 
         gamePanel.gameState = gameState;
+        gamePanel.playSE(6);
         gamePanel.ui.currentDialogue = "You fall into a pit";
         gamePanel.player.life--;
         canTouchEvent = false;
@@ -112,6 +113,8 @@ public class EventHandler {
 
     public void healingPool(int gameState){
             gamePanel.gameState = gameState;
+            gamePanel.player.attackCanceled = true;
+            gamePanel.playSE(2);
             gamePanel.ui.currentDialogue = "You are healed";
             gamePanel.player.life = gamePanel.player.maxLife;
     }

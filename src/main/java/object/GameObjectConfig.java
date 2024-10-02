@@ -7,6 +7,24 @@ public class GameObjectConfig {
     private String imageName;
     private List<StateConfig> states;
     private boolean collisionOn;
+    private int attack;
+    private int defense;
+
+    public int getDefense() {
+        return defense;
+    }
+
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
 
     public String getName() {
         return name;
