@@ -18,6 +18,9 @@ public class Player extends Entity{
     public final int screenX;
     public final int screenY;
     public boolean attackCanceled;
+    public boolean canAttack = true;
+    public boolean enterPressedHandled = false;
+
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler){
         super(gamePanel);
@@ -96,83 +99,101 @@ public class Player extends Entity{
         attackRight2 = setup("/player/Attacking sprites/boy_attack_right_2", gamePanel.tileSize*2, gamePanel.tileSize);
     }
 
-    public void update(){
-
-        if(attacking){
-            attacking();
+    @Override
+    public void update() {
+        if (gamePanel.gameState != gamePanel.dialogState) {
+            attackCanceled = false;
         }
 
-        if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed || keyHandler.enterPressed){
+        int npcIndex = gamePanel.collisionChecker.checkEntity(this, gamePanel.npc);
 
-            if(keyHandler.upPressed){
-                direction = Direction.UP;
-            }
-            else if(keyHandler.downPressed){
-                direction = Direction.DOWN;
-            }
-            else if(keyHandler.leftPressed){
-                direction = Direction.LEFT;
-            }
-            else if(keyHandler.rightPressed){
-                direction = Direction.RIGHT;
-            }
-
-            collisionOn = false;
-
-            gamePanel.collisionChecker.checkTile(this);
-
-            int objectIndex = gamePanel.collisionChecker.checkObject(this, true);
-            pickUpObject(objectIndex);
-
-            int npcIndex = gamePanel.collisionChecker.checkEntity(this, gamePanel.npc);
+        if (keyHandler.enterPressed && !enterPressedHandled && npcIndex != 999 && gamePanel.gameState != gamePanel.dialogState) {
+            attackCanceled = true;
             interactNPC(npcIndex);
-
-            int monsterIndex = gamePanel.collisionChecker.checkEntity(this, gamePanel.monsters);
-            contactMonster(monsterIndex);
-            gamePanel.eventHandler.checkEvent();
-
-            if(!collisionOn && !keyHandler.enterPressed){
-                switch (direction) {
-                    case Direction.UP -> worldY -= speed;
-                    case Direction.DOWN -> worldY += speed;
-                    case Direction.LEFT -> worldX -= speed;
-                    case Direction.RIGHT -> worldX += speed;
-                }
-            }
-
-            if(keyHandler.enterPressed && !attackCanceled){
-                gamePanel.playSE(7);
-                attacking = true;
-                spriteCounter = 0;
-            }
-
-            gamePanel.keyHandler.enterPressed = false;
-
-            if(!keyHandler.enterPressed)spriteCounter++;
-
-            if(spriteCounter > 10){
-                if(spriteNum == 1) {
-                    spriteNum = 2;
-                } else if(spriteNum == 2){
-                    spriteNum = 1;
-                }
-                spriteCounter = 0;
-            }
-
+            enterPressedHandled = true;
+            return;
         }
-        if(invincible){
+
+        if (keyHandler.enterPressed && !attackCanceled && !attacking && canAttack && !enterPressedHandled && gamePanel.gameState != gamePanel.dialogState) {
+            gamePanel.playSE(7);
+            attacking = true;
+            spriteCounter = 0;
+            canAttack = false;
+            enterPressedHandled = true;
+        }
+
+        if (attacking) {
+            attacking();
+        } else {
+            if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
+                if (keyHandler.upPressed) {
+                    direction = Direction.UP;
+                } else if (keyHandler.downPressed) {
+                    direction = Direction.DOWN;
+                } else if (keyHandler.leftPressed) {
+                    direction = Direction.LEFT;
+                } else if (keyHandler.rightPressed) {
+                    direction = Direction.RIGHT;
+                }
+
+                collisionOn = false;
+
+                gamePanel.collisionChecker.checkTile(this);
+
+                if (npcIndex != 999) {
+                    collisionOn = true; // Set collision if an NPC is in the way
+                }
+
+                int objectIndex = gamePanel.collisionChecker.checkObject(this, true);
+                pickUpObject(objectIndex);
+
+                int monsterIndex = gamePanel.collisionChecker.checkEntity(this, gamePanel.monsters);
+                contactMonster(monsterIndex);
+                gamePanel.eventHandler.checkEvent();
+
+                if (!collisionOn) {
+                    switch (direction) {
+                        case UP -> worldY -= speed;
+                        case DOWN -> worldY += speed;
+                        case LEFT -> worldX -= speed;
+                        case RIGHT -> worldX += speed;
+                    }
+                }
+
+                spriteCounter++;
+                if (spriteCounter > 10) {
+                    if (spriteNum == 1) {
+                        spriteNum = 2;
+                    } else if (spriteNum == 2) {
+                        spriteNum = 1;
+                    }
+                    spriteCounter = 0;
+                }
+            }
+        }
+
+        if (!attacking && !keyHandler.enterPressed) {
+            canAttack = true;
+            enterPressedHandled = false;
+        }
+
+        if (invincible) {
             invincibleCounter++;
-            if(invincibleCounter > 30) {
-                invincible=false;
+            if (invincibleCounter > 30) {
+                invincible = false;
                 invincibleCounter = 0;
             }
         }
-        if(keyHandler.isTestMode){
+
+        if (keyHandler.isTestMode) {
             System.out.println("Invincible counter = " + invincibleCounter);
         }
     }
 
+
+
     private void attacking() {
+        attacking = true;
         spriteCounter++;
         if(spriteCounter <= 5) spriteNum = 1;
         if(spriteCounter > 5 && spriteNum <= 25) {
