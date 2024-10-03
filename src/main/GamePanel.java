@@ -4,6 +4,7 @@ import entity.Entity;
 import entity.Player;
 import object.GameObject;
 import tile.TileManager;
+import util.GameState;
 import util.Renderable;
 
 import javax.swing.*;
@@ -82,19 +83,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Entity[] npc = new Entity[10];
 
     /** The current state of the game. */
-    public int gameState;
-
-    public final int titleState = 0;
-
-    /** Game state indicating that the game is in play. */
-    public final int playState = 1;
-
-    /** Game state indicating that the game is paused. */
-    public final int pauseState = 2;
-
-    public final int dialogState = 3;
-
-    public final int characterState = 4;
+    public GameState gameState;
 
     public ObjectManager objectManager;
 
@@ -120,11 +109,11 @@ public class GamePanel extends JPanel implements Runnable {
      * Initializes the game by setting up objects, NPCs, and playing background music.
      */
     public void setupGame() {
+        gameState = GameState.TITLE;
         assetSetter.setObject();
         assetSetter.setNPC();
         assetSetter.setMonster();
         playMusic(0);
-        gameState = titleState;
     }
 
     /**
@@ -165,7 +154,7 @@ public class GamePanel extends JPanel implements Runnable {
      * Updates the game logic, such as player movement and game state.
      */
     public void update() {
-        if (gameState == playState) {
+        if (gameState == GameState.PLAY) {
             player.update();
             for(Entity npc : npc){
                 if(npc != null){
@@ -183,7 +172,7 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
         }
-        if (gameState == pauseState) {
+        if (gameState == GameState.PAUSE) {
             // Logic for pause state can be added here
         }
     }
@@ -197,7 +186,7 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(graphics);
         Graphics2D graphics2D = (Graphics2D) graphics;
 
-        if(gameState == titleState){
+        if(gameState == GameState.TITLE){
             ui.draw(graphics2D);
         } else {
             tileManager.draw(graphics2D);

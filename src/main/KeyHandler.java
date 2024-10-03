@@ -1,5 +1,7 @@
 package main;
 
+import util.GameState;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -23,19 +25,19 @@ public class KeyHandler implements KeyListener {
         int code = e.getKeyCode();
 
         //Title state
-        if(gamePanel.gameState == gamePanel.titleState){
+        if(gamePanel.gameState == GameState.TITLE){
             titleState(code);
         }
-        else if(gamePanel.gameState == gamePanel.playState){
+        else if(gamePanel.gameState == GameState.PLAY){
             playState(code);
         }
-        else if(gamePanel.gameState == gamePanel.pauseState){
+        else if(gamePanel.gameState == GameState.PAUSE){
             pauseState(code);
         }
-        else if(gamePanel.gameState == gamePanel.dialogState){
+        else if(gamePanel.gameState == GameState.DIALOG){
             dialogueState(code);
         }
-        else if(gamePanel.gameState == gamePanel.characterState){
+        else if(gamePanel.gameState == GameState.CHARACTER){
             characterState(code);
         }
 
@@ -47,19 +49,19 @@ public class KeyHandler implements KeyListener {
 
     private void characterState(int code) {
         if(code == KeyEvent.VK_I) {
-            gamePanel.gameState = gamePanel.playState;
+            gamePanel.gameState = GameState.PLAY;
         }
     }
 
     private void dialogueState(int code) {
         if(code == KeyEvent.VK_ENTER){
-            gamePanel.gameState = gamePanel.playState;
+            gamePanel.gameState = GameState.PLAY;
         }
     }
 
     private void pauseState(int code) {
         if(code == KeyEvent.VK_P){
-            gamePanel.gameState = gamePanel.playState;
+            gamePanel.gameState = GameState.PLAY;
         }
     }
 
@@ -77,10 +79,10 @@ public class KeyHandler implements KeyListener {
             rightPressed = true;
         }
         if(code == KeyEvent.VK_P){
-            gamePanel.gameState = gamePanel.pauseState;
+            gamePanel.gameState = GameState.PAUSE;
         }
         if(code == KeyEvent.VK_I) {
-            gamePanel.gameState = gamePanel.characterState;
+            gamePanel.gameState = GameState.CHARACTER;
         }
         if(code == KeyEvent.VK_ENTER){
             enterPressed = true;
@@ -118,15 +120,15 @@ public class KeyHandler implements KeyListener {
             if(code == KeyEvent.VK_ENTER){
                 if(gamePanel.ui.commandNumber == 0){
                     System.out.println("You chose Viking!");
-                    gamePanel.gameState = gamePanel.playState;
+                    gamePanel.gameState = GameState.PLAY;
                 }
                 if(gamePanel.ui.commandNumber == 1) {
                     System.out.println("You chose Mage!");
-                    gamePanel.gameState = gamePanel.playState;
+                    gamePanel.gameState = GameState.PLAY;
                 }
                 if(gamePanel.ui.commandNumber == 2) {
                     System.out.println("You chose Archer!");
-                    gamePanel.gameState = gamePanel.playState;
+                    gamePanel.gameState = GameState.PLAY;
                 }
                 if(gamePanel.ui.commandNumber == 3) {
                     gamePanel.ui.commandNumber = 0;

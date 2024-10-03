@@ -1,6 +1,7 @@
 package main;
 
 import util.Direction;
+import util.GameState;
 
 import java.awt.*;
 
@@ -45,10 +46,10 @@ public class EventHandler {
 
         if(canTouchEvent){
 
-        if(hit(23, 17, Direction.ANY)) damagePit(23, 17, gamePanel.dialogState);
-        if(hit(25, 17, Direction.ANY)) damagePit(25, 17, gamePanel.dialogState);
-        if (hit(23, 12, Direction.UP) && gamePanel.keyHandler.enterPressed) healingPool(gamePanel.dialogState);
-        if (hit(27, 17, Direction.RIGHT)) teleport(gamePanel.dialogState);
+        if(hit(23, 17, Direction.ANY)) damagePit(23, 17, GameState.DIALOG);
+        if(hit(25, 17, Direction.ANY)) damagePit(25, 17, GameState.DIALOG);
+        if (hit(23, 12, Direction.UP) && gamePanel.keyHandler.enterPressed) healingPool(GameState.DIALOG);
+        if (hit(27, 17, Direction.RIGHT)) teleport(GameState.DIALOG);
         }
     }
 
@@ -102,7 +103,7 @@ public class EventHandler {
         return hit;
     }
 
-    private void damagePit(int col, int row, int gameState) {
+    private void damagePit(int col, int row, GameState gameState) {
 
         gamePanel.gameState = gameState;
         gamePanel.playSE(6);
@@ -111,7 +112,7 @@ public class EventHandler {
         canTouchEvent = false;
     }
 
-    public void healingPool(int gameState){
+    public void healingPool(GameState gameState){
             gamePanel.gameState = gameState;
             gamePanel.player.attackCanceled = true;
             gamePanel.playSE(2);
@@ -119,7 +120,7 @@ public class EventHandler {
             gamePanel.player.life = gamePanel.player.maxLife;
     }
 
-    private void teleport(int gameState) {
+    private void teleport(GameState gameState) {
 
         gamePanel.gameState = gameState;
         gamePanel.ui.currentDialogue = "Teleport!";

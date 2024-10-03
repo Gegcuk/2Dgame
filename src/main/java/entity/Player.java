@@ -7,9 +7,12 @@ import object.GameObject;
 import object.GameObjectConfig;
 import object.GameObjectFactory;
 import util.Direction;
+import util.GameState;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+
+import static main.CollisionChecker.NO_ENTITY;
 
 
 public class Player extends Entity{
@@ -101,20 +104,20 @@ public class Player extends Entity{
 
     @Override
     public void update() {
-        if (gamePanel.gameState != gamePanel.dialogState) {
+        if (gamePanel.gameState != GameState.DIALOG) {
             attackCanceled = false;
         }
 
         int npcIndex = gamePanel.collisionChecker.checkEntity(this, gamePanel.npc);
 
-        if (keyHandler.enterPressed && !enterPressedHandled && npcIndex != 999 && gamePanel.gameState != gamePanel.dialogState) {
+        if (keyHandler.enterPressed && !enterPressedHandled && npcIndex != NO_ENTITY && gamePanel.gameState != GameState.DIALOG) {
             attackCanceled = true;
             interactNPC(npcIndex);
             enterPressedHandled = true;
             return;
         }
 
-        if (keyHandler.enterPressed && !attackCanceled && !attacking && canAttack && !enterPressedHandled && gamePanel.gameState != gamePanel.dialogState) {
+        if (keyHandler.enterPressed && !attackCanceled && !attacking && canAttack && !enterPressedHandled && gamePanel.gameState != GameState.DIALOG) {
             gamePanel.playSE(7);
             attacking = true;
             spriteCounter = 0;
@@ -140,7 +143,7 @@ public class Player extends Entity{
 
                 gamePanel.collisionChecker.checkTile(this);
 
-                if (npcIndex != 999) {
+                if (npcIndex != NO_ENTITY) {
                     collisionOn = true; // Set collision if an NPC is in the way
                 }
 
@@ -190,13 +193,11 @@ public class Player extends Entity{
         }
     }
 
-
-
     private void attacking() {
         attacking = true;
         spriteCounter++;
         if(spriteCounter <= 5) spriteNum = 1;
-        if(spriteCounter > 5 && spriteNum <= 25) {
+        if(spriteCounter > 5 && spriteCounter <= 25) {
             spriteNum = 2;
             int currentWorldX = worldX;
             int currentWorldY = worldY;
@@ -230,7 +231,7 @@ public class Player extends Entity{
     }
 
     private void damageMonster(int monsterIndex) {
-        if(monsterIndex != 999){
+        if(monsterIndex != NO_ENTITY){
             if(!gamePanel.monsters[monsterIndex].invincible){
                 gamePanel.playSE(5);
                 gamePanel.monsters[monsterIndex].life -= attack;
@@ -248,23 +249,23 @@ public class Player extends Entity{
 
     public void pickUpObject(int index){
         String objectName = "empty";
-        if(index != 999){
+        if(index != NO_ENTITY){
 
         }
     }
 
     private void interactNPC(int npcIndex) {
         if(keyHandler.enterPressed){
-            if(npcIndex != 999){
+            if(npcIndex != NO_ENTITY){
                 attackCanceled = true;
-                gamePanel.gameState = gamePanel.dialogState;
+                gamePanel.gameState = GameState.DIALOG;
                 gamePanel.npc[npcIndex].speak();
             }
         }
     }
 
     private void contactMonster(int monsterIndex) {
-        if (monsterIndex != 999){
+        if (monsterIndex != NO_ENTITY){
             if(!invincible) {
                 gamePanel.playSE(6);
                 life--;
