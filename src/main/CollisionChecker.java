@@ -7,6 +7,8 @@ import java.util.List;
 
 public class CollisionChecker {
 
+    public static final int NO_ENTITY = -1;
+
     GamePanel gamePanel;
 
     public CollisionChecker(GamePanel gamePanel){
@@ -63,7 +65,7 @@ public class CollisionChecker {
     }
 
     public int checkObject(Entity entity, boolean player){
-        int index = 999;
+        int index = NO_ENTITY;
 
         List<GameObject> objects = gamePanel.objectManager.getGameObjects();
         for (int i = 0; i < objects.size(); i++) {
@@ -112,7 +114,7 @@ public class CollisionChecker {
     }
 
     public int checkEntity(Entity entity, Entity[] target){
-        int index = 999;
+        int index = NO_ENTITY;
 
         for(int i = 0; i < target.length; i++){
             if(target[i] != null){
