@@ -2,10 +2,6 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
-import main.ObjectManager;
-import object.GameObject;
-import object.GameObjectConfig;
-import object.GameObjectFactory;
 import util.Direction;
 import util.GameState;
 
@@ -59,7 +55,7 @@ public class Player extends Entity{
         equippedShield = inventory.get(0);
         equippedWeapon = inventory.get(1);
 
-        maxLife = 6;
+        maxLife = 10;
         life = maxLife;
         level = 1;
         strength = 1;
@@ -234,15 +230,36 @@ public class Player extends Entity{
         if(monsterIndex != NO_ENTITY){
             if(!gamePanel.monsters[monsterIndex].invincible){
                 gamePanel.playSE(5);
-                gamePanel.monsters[monsterIndex].life -= attack;
+                int damage = attack - gamePanel.monsters[monsterIndex].defense;
+                if (damage < 0) damage = 0;
+                gamePanel.monsters[monsterIndex].life -= damage;
+                gamePanel.ui.addMessage(damage + " damage!");
                 gamePanel.monsters[monsterIndex].invincible = true;
                 gamePanel.monsters[monsterIndex].damageReaction();
-                System.out.println(equippedWeapon.name + " " + equippedWeapon.getAttack());
-                System.out.println(equippedShield.name + " " + equippedShield.getDefense());
                 if(gamePanel.monsters[monsterIndex].life <= 0){
                     gamePanel.monsters[monsterIndex].dying  = true;
+                    gamePanel.ui.addMessage("Killed the " + gamePanel.monsters[monsterIndex].name + "!");
+                    exp += gamePanel.monsters[monsterIndex].exp;
+                    checkLvlUp();
                 }
             }
+        }
+    }
+
+    private void checkLvlUp() {
+        if(exp >= nextLevelExp){
+            exp -= nextLevelExp;
+            maxLife+=2;
+            level++;
+            strength++;
+            dexterity++;
+            attack = getAttack();
+            defense = getDefense();
+            gamePanel.playSE(8);
+            nextLevelExp = nextLevelExp * 2;
+            if(exp >= nextLevelExp) checkLvlUp();
+            gamePanel.gameState = GameState.DIALOG;
+            gamePanel.ui.currentDialogue = "You are leveled up!";
         }
     }
 
@@ -268,7 +285,10 @@ public class Player extends Entity{
         if (monsterIndex != NO_ENTITY){
             if(!invincible) {
                 gamePanel.playSE(6);
-                life--;
+                int damage = attack - gamePanel.player.defense;
+                if (damage < 0) damage = 0;
+                System.out.println("Got hit with " + damage + " damage");
+                life-= damage;
                 invincible = true;
             }
         }

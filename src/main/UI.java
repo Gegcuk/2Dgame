@@ -6,6 +6,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -19,10 +21,11 @@ public class UI {
     Font pixelify_40, pixelify_50B, pixelify_32P;
     BufferedImage heart_full, heart_half, heart_empty;
     public boolean messageOn = false; // Flag to display messages on the screen
-    public String message = ""; // The message to display
     public String currentDialogue = ""; // Current dialogue text to display
     public int commandNumber = 0;
     public int titleScreenState = 0;
+    List<String> messageList = new ArrayList<>();
+    List<Integer> messageCounter = new ArrayList<>();
 
     /**
      * Constructor that initializes the UI with the given GamePanel and fonts.
@@ -51,9 +54,9 @@ public class UI {
      *
      * @param text the message text to display
      */
-    public void showMessage(String text){
-        message = text;
-        messageOn = true;
+    public void addMessage(String text){
+        messageList.add(text);
+        messageCounter.add(0);
     }
 
     /**
@@ -73,6 +76,7 @@ public class UI {
 
         if(gamePanel.gameState == GameState.PLAY){
             drawPlayerLife();
+            drawMessage();
         }
 
         // Draw pause screen if the game is in pause state
@@ -91,8 +95,6 @@ public class UI {
             drawCharacterScreen();
         }
     }
-
-
 
     private void drawPlayerLife() {
         int x = gamePanel.tileSize/2;
@@ -115,6 +117,28 @@ public class UI {
 
             graphics2D.drawImage(heartImage, x, y, heartSize, heartSize, null);
             x += heartSize + 10;
+        }
+    }
+
+
+    private void drawMessage() {
+        int messageX = gamePanel.tileSize;
+        int messageY = gamePanel.tileSize*8;
+       graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 20F));
+        for (int i = 0; i < messageList.size(); i++) {
+            String text = messageList.get(i);
+            if (text != null) {
+                graphics2D.setColor(Color.black);
+                graphics2D.drawString(text, messageX+2, messageY+2);
+                graphics2D.setColor(Color.white);
+                graphics2D.drawString(text, messageX, messageY);
+                messageCounter.set(i, messageCounter.get(i)+1);
+                messageY += 30;
+                if(messageCounter.get(i) > 180) {
+                    messageList.remove(i);
+                    messageCounter.remove(i);
+                }
+            }
         }
     }
 
