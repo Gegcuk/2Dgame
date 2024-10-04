@@ -144,7 +144,9 @@ public class Entity implements Renderable {
         if(type == 2 && contactPlayer){
             if(!gamePanel.player.invincible){
                 gamePanel.playSE(6);
-                gamePanel.player.life--;
+                int damage = attack - gamePanel.player.defense;
+                if (damage < 0) damage = 0;
+                life -= damage;
                 gamePanel.player.invincible = true;
             }
         }

@@ -121,7 +121,7 @@ public class EventHandler {
     }
 
     private void teleport(GameState gameState) {
-
+        gamePanel.assetSetter.setMonster();
         gamePanel.gameState = gameState;
         gamePanel.ui.currentDialogue = "Teleport!";
         gamePanel.player.worldX = gamePanel.tileSize * 37;

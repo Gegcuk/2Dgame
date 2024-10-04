@@ -10,7 +10,7 @@
     "name": "Shield",
     "imageName": "shield_wood.png",
     "attack": 0,
-    "defense": 5
+    "defense": 9
   },
   {
     "name": "Key",
